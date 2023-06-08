@@ -1,4 +1,4 @@
 <resources>
 
-    <style name="Theme.Pocketv" parent="@style/Theme.Leanback" />
+    <style name="Theme.Pocketv"  parent="android:Theme.Material.NoActionBar"  />
 </resources>

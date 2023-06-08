@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright 2023 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<resources>
+    <color name="jetstream_background">#242C54</color>
+    <color name="primary">#545299</color>
+    <color name="onPrimary">#E2C2BF</color>
+    <color name="primaryContainer">#4F2481</color>
+    <color name="onPrimaryContainer">#E2C2BF</color>
+    <color name="secondary">#90A6CE</color>
+    <color name="onSecondary">#242C54</color>
+    <color name="secondaryContainer">#545299</color>
+    <color name="onSecondaryContainer">#F5E2E0</color>
+    <color name="tertiary">#4F2481</color>
+    <color name="onTertiary">#F5E2E0</color>
+    <color name="tertiaryContainer">#90A6CE</color>
+    <color name="onTertiaryContainer">#242C54</color>
+    <color name="background">#242C54</color>
+    <color name="onBackground">#E2C2BF</color>
+    <color name="surface">#242C54</color>
+    <color name="onSurface">#F5E2E0</color>
+    <color name="surfaceVariant">#545299</color>
+    <color name="onSurfaceVariant">#F5E2E0</color>
+    <color name="error">#DD6885</color>
+    <color name="onError">#242C54</color>
+    <color name="errorContainer">#4F2481</color>
+    <color name="onErrorContainer">#DD6885</color>
+    <color name="border">#545299</color>
+
+    <color name="message_received_background_color_night">#25303F</color>
+    <color name="message_sent_background_color_night">#486991</color>
+</resources>
