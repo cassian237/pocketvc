@@ -1,0 +1,76 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
+    id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
+    id("com.google.dagger.hilt.android")
+    id 'com.google.firebase.crashlytics'
+}
+
+android {
+    namespace 'not.a.bug.pocketv'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "not.a.bug.pocketv"
+        minSdk 21
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-service:2.6.1'
+
+    implementation platform('com.google.firebase:firebase-bom:32.1.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+
+    def composeBom = platform('androidx.compose:compose-bom:2023.04.01')
+    implementation composeBom
+
+    // General compose dependencies
+    implementation 'androidx.activity:activity-compose:1.7.2'
+
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+
+    implementation 'androidx.compose.material:material:1.4.3'
+
+    implementation 'com.github.kenglxn.QRGen:android:3.0.1'
+    implementation 'io.coil-kt:coil-compose:2.2.1'
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+
+    implementation 'com.google.android.exoplayer:exoplayer:2.18.7'
+
+    implementation 'com.revenuecat.purchases:purchases:6.0.0'
+    implementation 'com.revenuecat.purchases:purchases-store-amazon:6.0.0'
+
+    // Compose for TV dependencies
+    def tvCompose = '1.0.0-alpha06'
+    implementation "androidx.tv:tv-foundation:$tvCompose"
+    implementation "androidx.tv:tv-material:$tvCompose"
+}

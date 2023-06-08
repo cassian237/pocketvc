@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "109717031814",
+    "project_id": "pocketv-6ebcf",
+    "storage_bucket": "pocketv-6ebcf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:109717031814:android:04e9ee3d81ab525737fa07",
+        "android_client_info": {
+          "package_name": "not.a.bug.pocketv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "109717031814-re9tqd2p1dkbstv2e7bdu1k7q2vjir0r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2PLGeRu2fXLDMkAqw9DuiYCswKQw7JBw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "109717031814-re9tqd2p1dkbstv2e7bdu1k7q2vjir0r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
