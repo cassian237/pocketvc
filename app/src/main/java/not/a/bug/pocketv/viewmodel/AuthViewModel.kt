@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import not.a.bug.pocketv.SessionManager
 import not.a.bug.pocketv.model.NetworkResult
 import not.a.bug.pocketv.model.PocketUser
 import not.a.bug.pocketv.model.RequestTokenResponse
@@ -19,20 +20,18 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val pocketRepository: PocketRepository,
-    private val db: FirebaseFirestore
+    private val db: FirebaseFirestore,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
+
+    private val _authState = MutableStateFlow(UserState(accessToken = sessionManager.getAccessToken()))
+    val authState: StateFlow<UserState> = _authState
 
     private val _requestTokenResult = MutableStateFlow<NetworkResult<RequestTokenResponse>>(NetworkResult.Loading)
     val requestTokenResult: StateFlow<NetworkResult<RequestTokenResponse>> = _requestTokenResult
 
-    private val _authorizeResult = MutableStateFlow<NetworkResult<PocketUser>>(NetworkResult.Loading)
-    val authorizeResult: StateFlow<NetworkResult<PocketUser>> = _authorizeResult
-
     private val _displayQrCode = MutableSharedFlow<String>()
     val displayQrCode: SharedFlow<String> = _displayQrCode
-
-    private val _navigateToHome = MutableSharedFlow<Unit>()
-    val navigateToHome: SharedFlow<Unit> = _navigateToHome
 
     fun requestToken() {
         viewModelScope.launch {
@@ -67,11 +66,13 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             val result = pocketRepository.authorize(code)
 
-            _authorizeResult.value = result
-
             if (result is NetworkResult.Success) {
-                _navigateToHome.emit(Unit)
+                _authState.value = UserState(accessToken = sessionManager.getAccessToken())
             }
         }
     }
+
+    data class UserState(
+        val accessToken: String?
+    )
 }

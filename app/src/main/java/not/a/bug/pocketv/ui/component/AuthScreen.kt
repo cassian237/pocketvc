@@ -22,17 +22,10 @@ import not.a.bug.pocketv.viewmodel.AuthViewModel
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun AuthScreen(
-    viewModel: AuthViewModel,
-    navController: NavHostController
+    viewModel: AuthViewModel
 ) {
     val requestTokenResult by viewModel.requestTokenResult.collectAsState()
     val displayQrCode by viewModel.displayQrCode.collectAsState(initial = "")
-
-    LaunchedEffect(Unit) {
-        viewModel.navigateToHome.collect {
-            navController.navigate("home")
-        }
-    }
 
     when (requestTokenResult) {
         is NetworkResult.Success -> {
