@@ -31,6 +31,9 @@ class AuthViewModel @Inject constructor(
     private val _displayQrCode = MutableSharedFlow<String>()
     val displayQrCode: SharedFlow<String> = _displayQrCode
 
+    private val _navigateToHome = MutableSharedFlow<Unit>()
+    val navigateToHome: SharedFlow<Unit> = _navigateToHome
+
     fun requestToken() {
         viewModelScope.launch {
             val deviceId = UUID.randomUUID().toString()
@@ -60,9 +63,15 @@ class AuthViewModel @Inject constructor(
     }
 
     // Appelé lorsque l'utilisateur revient à l'application après l'autorisation Pocket
-    fun handleAuthorizationCallback(code: String) {
+    private fun handleAuthorizationCallback(code: String) {
         viewModelScope.launch {
-            _authorizeResult.value = pocketRepository.authorize(code)
+            val result = pocketRepository.authorize(code)
+
+            _authorizeResult.value = result
+
+            if (result is NetworkResult.Success) {
+                _navigateToHome.emit(Unit)
+            }
         }
     }
 }

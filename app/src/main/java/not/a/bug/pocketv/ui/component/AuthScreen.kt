@@ -4,11 +4,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.tv.material3.Button
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Text
@@ -20,10 +22,17 @@ import not.a.bug.pocketv.viewmodel.AuthViewModel
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun AuthScreen(
-    viewModel: AuthViewModel
+    viewModel: AuthViewModel,
+    navController: NavHostController
 ) {
     val requestTokenResult by viewModel.requestTokenResult.collectAsState()
     val displayQrCode by viewModel.displayQrCode.collectAsState(initial = "")
+
+    LaunchedEffect(Unit) {
+        viewModel.navigateToHome.collect {
+            navController.navigate("home")
+        }
+    }
 
     when (requestTokenResult) {
         is NetworkResult.Success -> {

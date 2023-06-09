@@ -1,13 +1,15 @@
 package not.a.bug.pocketv.ui
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import not.a.bug.pocketv.ui.component.AuthScreen
-import not.a.bug.pocketv.ui.theme.PocketvTheme
+import not.a.bug.pocketv.ui.component.HomeScreen
 import not.a.bug.pocketv.viewmodel.AuthViewModel
 
 @AndroidEntryPoint
@@ -19,8 +21,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            PocketvTheme {
-                AuthScreen(authViewModel)
+            val navController = rememberNavController()
+            NavHost(navController = navController, startDestination = "auth") {
+                composable("auth") {
+                    AuthScreen(authViewModel, navController)
+                }
+                composable("home") {
+                    HomeScreen()
+                }
             }
         }
     }
