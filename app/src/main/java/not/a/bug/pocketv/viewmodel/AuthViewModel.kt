@@ -55,6 +55,7 @@ class AuthViewModel @Inject constructor(
                     val authorized = snapshot.getBoolean("value")
                     if (authorized == true) {
                         handleAuthorizationCallback(requestToken)
+                        snapshot.reference.delete()
                         return@addSnapshotListener
                     }
                 }
