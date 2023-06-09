@@ -52,7 +52,7 @@ class AuthViewModel @Inject constructor(
         db.collection("codes").document(id)
             .addSnapshotListener { snapshot, e ->
                 if (snapshot != null && snapshot.exists()) {
-                    val authorized = snapshot.getBoolean("authorized")
+                    val authorized = snapshot.getBoolean("value")
                     if (authorized == true) {
                         handleAuthorizationCallback(requestToken)
                         return@addSnapshotListener

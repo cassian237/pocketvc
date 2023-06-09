@@ -28,7 +28,7 @@ class PocketRepository(
             val consumerKey = sessionManager.getConsumerKey()
             val result = apiService.authorize(consumerKey, code)
             result.body()?.let {
-                sessionManager.saveAccessToken(it.accessToken)
+                sessionManager.saveAccessToken(it.access_token)
             }
             result
         }
