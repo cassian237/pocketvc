@@ -2,6 +2,7 @@ package not.a.bug.pocketv.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,35 +18,45 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val pocketRepository: PocketRepository
+    private val pocketRepository: PocketRepository,
+    private val db: FirebaseFirestore
 ) : ViewModel() {
 
-    private val _requestTokenResult = MutableStateFlow<NetworkResult<RequestTokenResponse>?>(null)
-    val requestTokenResult: StateFlow<NetworkResult<RequestTokenResponse>?> = _requestTokenResult
+    private val _requestTokenResult = MutableStateFlow<NetworkResult<RequestTokenResponse>>(NetworkResult.Loading)
+    val requestTokenResult: StateFlow<NetworkResult<RequestTokenResponse>> = _requestTokenResult
 
-    private val _authorizeResult = MutableStateFlow<NetworkResult<PocketUser>?>(null)
-    val authorizeResult: StateFlow<NetworkResult<PocketUser>?> = _authorizeResult
+    private val _authorizeResult = MutableStateFlow<NetworkResult<PocketUser>>(NetworkResult.Loading)
+    val authorizeResult: StateFlow<NetworkResult<PocketUser>> = _authorizeResult
 
     private val _displayQrCode = MutableSharedFlow<String>()
     val displayQrCode: SharedFlow<String> = _displayQrCode
 
     fun requestToken() {
         viewModelScope.launch {
-            _requestTokenResult.value = pocketRepository.requestToken("pocketapp107637")
+            val deviceId = UUID.randomUUID().toString()
+            _requestTokenResult.value = pocketRepository.requestToken("https://pocketv-6ebcf.web.app?code=$deviceId")
             val requestTokenResult = _requestTokenResult.value
 
             if (requestTokenResult is NetworkResult.Success) {
                 val requestToken = requestTokenResult.data.code
-                val deviceId = UUID.randomUUID().toString()
 
                 _displayQrCode.emit("https://pocketv-6ebcf.web.app?request_token=${requestToken}&key=$deviceId")
-                listenToAuthSuccess(deviceId)
+                listenToAuthSuccess(deviceId, requestToken)
             }
         }
     }
 
-    private fun listenToAuthSuccess(id: String) {
-
+    private fun listenToAuthSuccess(id: String, requestToken: String) {
+        db.collection("codes").document(id)
+            .addSnapshotListener { snapshot, e ->
+                if (snapshot != null && snapshot.exists()) {
+                    val authorized = snapshot.getBoolean("authorized")
+                    if (authorized == true) {
+                        handleAuthorizationCallback(requestToken)
+                        return@addSnapshotListener
+                    }
+                }
+            }
     }
 
     // Appelé lorsque l'utilisateur revient à l'application après l'autorisation Pocket
