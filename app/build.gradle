@@ -59,6 +59,8 @@ dependencies {
     // OkHttp
     implementation "com.squareup.okhttp3:okhttp:4.10.0"
 
+    implementation 'org.jsoup:jsoup:1.13.1'
+
     implementation "androidx.security:security-crypto:1.1.0-alpha06"
 
     implementation platform('com.google.firebase:firebase-bom:32.1.0')

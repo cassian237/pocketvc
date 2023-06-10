@@ -5,12 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import not.a.bug.pocketv.model.NetworkResult
 import not.a.bug.pocketv.model.PocketArticle
 import not.a.bug.pocketv.repository.PocketRepository
+import org.jsoup.Jsoup
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,15 +24,44 @@ class HomeViewModel @Inject constructor(
     private val _articles = MutableStateFlow<List<PocketArticle>>(emptyList())
     val articles: StateFlow<List<PocketArticle>> = _articles
 
-    fun loadArticles() {
-        viewModelScope.launch {
-            val result = pocketRepository.getItems()
+    private val _isLoading = MutableStateFlow<Boolean>(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
-            if (result is NetworkResult.Success) {
-                _articles.value = result.data.list.map { it.value }
-            } else {
-                // Handle error here
+    fun loadArticles() {
+        _isLoading.value = true
+        viewModelScope.launch {
+
+            when (val result = pocketRepository.getItems(detailType = "complete")) {
+                is NetworkResult.Error -> {
+                    _isLoading.value = false
+                }
+
+                is NetworkResult.Loading -> {
+                    _isLoading.value = true
+                }
+
+                is NetworkResult.Success -> {
+                    _articles.value = result.data.list.map {
+                        it.value.copy(
+                            resolvedImage = fetchMetaImage(it.value.resolvedUrl)
+                                ?: it.value.images?.asIterable()?.firstOrNull()?.value?.src
+                        )
+                    }
+                    _isLoading.value = false
+                }
             }
+        }
+    }
+
+    suspend fun fetchMetaImage(url: String): String? = withContext(Dispatchers.IO) {
+        try {
+            val doc = Jsoup.connect(url).get()
+            val ogImage = doc.select("meta[property=og:image]").first()
+            return@withContext ogImage.attr("content")
+        } catch (e: Exception) {
+            // Handle error
+            e.printStackTrace()
+            return@withContext null
         }
     }
 }

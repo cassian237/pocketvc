@@ -10,14 +10,15 @@ data class PocketArticle(
     @SerializedName("favorite") val favorite: String,
     @SerializedName("status") val status: String,
     @SerializedName("resolved_title") val resolvedTitle: String,
+    var resolvedImage: String?,
     @SerializedName("resolved_url") val resolvedUrl: String,
     @SerializedName("excerpt") val excerpt: String,
     @SerializedName("is_article") val isArticle: String,
     @SerializedName("has_video") val hasVideo: String,
     @SerializedName("has_image") val hasImage: String,
     @SerializedName("word_count") val wordCount: String,
-    @SerializedName("images") val images: Map<String, PocketImage>,
-    @SerializedName("videos") val videos: Map<String, PocketVideo>
+    @SerializedName("images") val images: Map<String, PocketImage>?,
+    @SerializedName("videos") val videos: Map<String, PocketVideo>?
 )
 
 data class PocketImage(
