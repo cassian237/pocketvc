@@ -13,11 +13,13 @@ import not.a.bug.pocketv.ui.component.AuthScreen
 import not.a.bug.pocketv.ui.component.HomeScreen
 import not.a.bug.pocketv.ui.theme.PocketvTheme
 import not.a.bug.pocketv.viewmodel.AuthViewModel
+import not.a.bug.pocketv.viewmodel.HomeViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val authViewModel: AuthViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +43,7 @@ class MainActivity : ComponentActivity() {
                 // Setup the NavHost and its NavGraph
                 NavHost(navController, startDestination = "authScreen") {
                     composable("authScreen") { AuthScreen(authViewModel) }
-                    composable("home") { /* HomeScreen() */ }
+                    composable("home") { HomeScreen(homeViewModel) }
                 }
             }
         }

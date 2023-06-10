@@ -1,5 +1,6 @@
 package not.a.bug.pocketv.api
 
+import not.a.bug.pocketv.model.ApiResponse
 import not.a.bug.pocketv.model.PocketAction
 import not.a.bug.pocketv.model.PocketArticle
 import not.a.bug.pocketv.model.PocketUser
@@ -44,5 +45,5 @@ interface PocketApi {
         @Query("state") state: String?,
         @Query("sort") sort: String?,
         @Query("detailType") detailType: String?
-    ): Response<List<PocketArticle>>
+    ): Response<ApiResponse<PocketArticle>>
 }

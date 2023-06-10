@@ -4,6 +4,7 @@ import not.a.bug.pocketv.SessionManager
 import not.a.bug.pocketv.api.ApiResponseHandler
 import not.a.bug.pocketv.api.PocketApi
 import not.a.bug.pocketv.model.AccessTokenNotFoundException
+import not.a.bug.pocketv.model.ApiResponse
 import not.a.bug.pocketv.model.NetworkResult
 import not.a.bug.pocketv.model.PocketAction
 import not.a.bug.pocketv.model.PocketArticle
@@ -58,7 +59,7 @@ class PocketRepository(
         state: String? = null,
         sort: String? = null,
         detailType: String? = null
-    ): NetworkResult<List<PocketArticle>> {
+    ): NetworkResult<ApiResponse<PocketArticle>> {
         return responseHandler.safeApiCall {
             val consumerKey = sessionManager.getConsumerKey()
             val accessToken = sessionManager.getAccessToken() ?: throw AccessTokenNotFoundException()

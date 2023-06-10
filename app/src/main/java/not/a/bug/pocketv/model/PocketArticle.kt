@@ -1,23 +1,41 @@
 package not.a.bug.pocketv.model
 
+import com.google.gson.annotations.SerializedName
+
 data class PocketArticle(
-    val item_id: String,
-    val resolved_id: String,
-    val given_url: String,
-    val given_title: String,
-    val favorite: String,
-    val status: String,
-    val time_added: String,
-    val time_updated: String,
-    val time_read: String,
-    val time_favorited: String,
-    val sort_id: Int,
-    val resolved_title: String,
-    val resolved_url: String,
-    val excerpt: String,
-    val is_article: String,
-    val is_index: String,
-    val has_video: String,
-    val has_image: String,
-    val word_count: String
+    @SerializedName("item_id") val itemId: String,
+    @SerializedName("resolved_id") val resolvedId: String,
+    @SerializedName("given_url") val givenUrl: String,
+    @SerializedName("given_title") val givenTitle: String,
+    @SerializedName("favorite") val favorite: String,
+    @SerializedName("status") val status: String,
+    @SerializedName("resolved_title") val resolvedTitle: String,
+    @SerializedName("resolved_url") val resolvedUrl: String,
+    @SerializedName("excerpt") val excerpt: String,
+    @SerializedName("is_article") val isArticle: String,
+    @SerializedName("has_video") val hasVideo: String,
+    @SerializedName("has_image") val hasImage: String,
+    @SerializedName("word_count") val wordCount: String,
+    @SerializedName("images") val images: Map<String, PocketImage>,
+    @SerializedName("videos") val videos: Map<String, PocketVideo>
+)
+
+data class PocketImage(
+    @SerializedName("item_id") val itemId: String,
+    @SerializedName("image_id") val imageId: String,
+    @SerializedName("src") val src: String,
+    @SerializedName("width") val width: String,
+    @SerializedName("height") val height: String,
+    @SerializedName("credit") val credit: String,
+    @SerializedName("caption") val caption: String
+)
+
+data class PocketVideo(
+    @SerializedName("item_id") val itemId: String,
+    @SerializedName("video_id") val videoId: String,
+    @SerializedName("src") val src: String,
+    @SerializedName("width") val width: String,
+    @SerializedName("height") val height: String,
+    @SerializedName("type") val type: String,
+    @SerializedName("vid") val vid: String
 )
