@@ -45,8 +45,6 @@ fun ArticleCard(
     onClick: () -> Unit
 ) {
     var isImageResolved by remember { mutableStateOf<Boolean>(article.resolvedImage != null) }
-    val uri = URI(article.resolvedUrl)
-    val domain = uri.host
 
     Card(onClick = onClick) {
         Column {
@@ -104,7 +102,7 @@ fun ArticleCard(
             )
 
             Text(
-                text = domain,
+                text = article.resolvedUrl,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .padding(bottom = 8.dp)

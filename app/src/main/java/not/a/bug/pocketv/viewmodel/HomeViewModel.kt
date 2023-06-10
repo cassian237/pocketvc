@@ -14,6 +14,7 @@ import not.a.bug.pocketv.model.NetworkResult
 import not.a.bug.pocketv.model.PocketArticle
 import not.a.bug.pocketv.repository.PocketRepository
 import org.jsoup.Jsoup
+import java.net.URI
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,9 +43,11 @@ class HomeViewModel @Inject constructor(
 
                 is NetworkResult.Success -> {
                     _articles.value = result.data.list.map {
+                        val meta = fetchMeta(it.value.resolvedUrl)
                         it.value.copy(
-                            resolvedImage = fetchMetaImage(it.value.resolvedUrl)
-                                ?: it.value.images?.asIterable()?.firstOrNull()?.value?.src
+                            resolvedImage = meta.first
+                                ?: it.value.images?.asIterable()?.firstOrNull()?.value?.src,
+                            resolvedUrl = meta.second ?: URI(it.value.resolvedUrl).host
                         )
                     }
                     _isLoading.value = false
@@ -53,15 +56,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    suspend fun fetchMetaImage(url: String): String? = withContext(Dispatchers.IO) {
-        try {
-            val doc = Jsoup.connect(url).get()
-            val ogImage = doc.select("meta[property=og:image]").first()
-            return@withContext ogImage.attr("content")
-        } catch (e: Exception) {
-            // Handle error
-            e.printStackTrace()
-            return@withContext null
+    private suspend fun fetchMeta(url: String): Pair<String?, String?> =
+        withContext(Dispatchers.IO) {
+            try {
+                val doc = Jsoup.connect(url).get()
+                val ogImage = doc.select("meta[property=og:image]").first()
+                val siteName = doc.select("meta[property=og:site_name]").first()
+                return@withContext Pair(ogImage.attr("content"), siteName.attr("content"))
+            } catch (e: Exception) {
+                // Handle error
+                e.printStackTrace()
+                return@withContext Pair(null, null)
+            }
         }
-    }
 }
