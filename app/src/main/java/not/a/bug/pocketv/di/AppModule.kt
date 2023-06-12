@@ -8,7 +8,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import not.a.bug.pocketv.SessionManager
+import not.a.bug.pocketv.api.MercuryParserApi
 import not.a.bug.pocketv.api.PocketApi
+import not.a.bug.pocketv.repository.MercuryParserRepository
 import not.a.bug.pocketv.repository.PocketRepository
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -50,6 +52,16 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideMercuryParserApi(): MercuryParserApi {
+        return Retrofit.Builder()
+            .baseUrl("http://54.36.101.28:3000")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(MercuryParserApi::class.java)
+    }
+
+    @Provides
+    @Singleton
     fun provideSessionManager(
         @ApplicationContext context: Context
     ): SessionManager {
@@ -63,5 +75,13 @@ object AppModule {
         sessionManager: SessionManager
     ): PocketRepository {
         return PocketRepository(apiService, sessionManager)
+    }
+    @Provides
+    @Singleton
+    fun provideMercuryParserRepository(
+        apiService: MercuryParserApi,
+        sessionManager: SessionManager
+    ): MercuryParserRepository {
+        return MercuryParserRepository(apiService)
     }
 }

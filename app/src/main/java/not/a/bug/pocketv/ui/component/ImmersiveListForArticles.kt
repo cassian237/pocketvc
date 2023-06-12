@@ -51,7 +51,11 @@ import not.a.bug.pocketv.model.PocketArticle
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun ImmersiveListForArticles(title: String, articles: List<PocketArticle>) {
+fun ImmersiveListForArticles(
+    title: String,
+    articles: List<PocketArticle>,
+    onArticleClicked: (PocketArticle) -> Unit
+) {
     if (articles.isNotEmpty()) {
         val imageHeight = 292.dp
         var listHasFocus by remember { mutableStateOf(false) }
@@ -249,7 +253,7 @@ fun ImmersiveListForArticles(title: String, articles: List<PocketArticle>) {
                 itemsIndexed(articles) { index, article ->
                     var modifier = Modifier.immersiveListItem(index)
                     if (index == 0) modifier = modifier.focusRequester(focusRequester)
-                    ArticleCard(modifier = modifier, article) {}
+                    ArticleCard(modifier = modifier, article) { onArticleClicked(article) }
 
                     LaunchedEffect(listHasFocus) {
                         if (listHasFocus && !lazyRowHasFocus.value) {

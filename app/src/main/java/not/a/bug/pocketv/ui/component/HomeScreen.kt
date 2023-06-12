@@ -15,11 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.material3.ExperimentalTvMaterial3Api
+import not.a.bug.pocketv.model.PocketArticle
 import not.a.bug.pocketv.viewmodel.HomeViewModel
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel) {
+fun HomeScreen(homeViewModel: HomeViewModel, onArticleClicked : (PocketArticle) -> Unit) {
     val latestArticles by homeViewModel.latestArticles.collectAsState()
     val archivedArticles by homeViewModel.archivedArticles.collectAsState()
     val favoriteArticles by homeViewModel.favoriteArticles.collectAsState()
@@ -41,19 +42,19 @@ fun HomeScreen(homeViewModel: HomeViewModel) {
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     content = {
                         item {
-                            ImmersiveListForArticles("Latest Articles", latestArticles)
+                            ImmersiveListForArticles("Latest Articles", latestArticles, onArticleClicked)
                         }
                         item {
-                            ListForArticles("Archived Articles", archivedArticles)
+                            ListForArticles("Archived Articles", archivedArticles, onArticleClicked)
                         }
                         item {
-                            ListForArticles("Favorite Articles", favoriteArticles)
+                            ListForArticles("Favorite Articles", favoriteArticles, onArticleClicked)
                         }
                         item {
-                            ListForArticles("Articles", articleContentType)
+                            ListForArticles("Articles", articleContentType, onArticleClicked)
                         }
                         item {
-                            ListForArticles("Videos", videoContentType)
+                            ListForArticles("Videos", videoContentType, onArticleClicked)
                         }
                         item { Spacer(modifier = Modifier.height(16.dp)) }
                     })

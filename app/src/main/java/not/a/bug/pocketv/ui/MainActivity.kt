@@ -1,5 +1,6 @@
 package not.a.bug.pocketv.ui
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -42,6 +43,8 @@ import androidx.tv.material3.Text
 import dagger.hilt.android.AndroidEntryPoint
 import not.a.bug.notificationcenter.util.FocusGroup
 import not.a.bug.notificationcenter.util.PremiumPillIndicator
+import not.a.bug.pocketv.model.PocketArticle
+import not.a.bug.pocketv.ui.component.ArticleScreen
 import not.a.bug.pocketv.ui.component.AuthScreen
 import not.a.bug.pocketv.ui.component.HomeScreen
 import not.a.bug.pocketv.ui.component.SearchScreen
@@ -56,7 +59,6 @@ class MainActivity : ComponentActivity() {
 
     private val authViewModel: AuthViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
-    private var selectedTab by mutableStateOf(0)
 
     @OptIn(ExperimentalTvMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,6 +73,10 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val authState by authViewModel.authState.collectAsState()
             var isTopBarVisible by remember { mutableStateOf(true) }
+
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                isTopBarVisible = (destination.route != "articleScreen" && destination.route != "authScreen")
+            }
 
             PocketvTheme {
                 Box(
@@ -108,7 +114,7 @@ class MainActivity : ComponentActivity() {
                                 .align(Alignment.CenterHorizontally)
                         ) {
                             // Only show TabRow when user is authenticated
-                            if (authState.accessToken != null) {
+                            if (authState.accessToken != null && isTopBarVisible) {
                                 TabRow(
                                     modifier = Modifier
                                         .padding(vertical = 16.dp),
@@ -176,9 +182,18 @@ class MainActivity : ComponentActivity() {
 
                         NavHost(navController, startDestination = "authScreen") {
                             composable("authScreen") { AuthScreen(authViewModel) }
-                            composable("home") { HomeScreen(homeViewModel) }
-                            composable("search") { SearchScreen(homeViewModel) { isTopBarVisible = it } }
+                            composable("home") { HomeScreen(homeViewModel, onArticleClicked = { article ->
+                                navController.navigate("articleScreen/${Uri.encode(article.givenUrl)}")
+                            }) }
+                            composable("search") { SearchScreen(homeViewModel, onArticleClicked = { article ->
+                                navController.navigate("articleScreen/${Uri.encode(article.givenUrl)}")
+                            }) }
                             composable("settings") { SettingsScreen() }
+                            composable("articleScreen/{articleUrl}") { backStackEntry ->
+                                // Get the articleId from the arguments
+                                val articleUrl = backStackEntry.arguments?.getString("articleUrl")
+                                ArticleScreen(articleUrl = articleUrl)
+                            }
                         }
                     }
                 }

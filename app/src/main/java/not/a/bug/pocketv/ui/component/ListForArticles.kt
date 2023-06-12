@@ -17,7 +17,7 @@ import not.a.bug.pocketv.model.PocketArticle
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun ListForArticles(title: String, articles: List<PocketArticle>) {
+fun ListForArticles(title: String, articles: List<PocketArticle>, onArticleClicked : (PocketArticle) -> Unit) {
     if (articles.isNotEmpty()) {
         Text(
             modifier = Modifier
@@ -39,7 +39,7 @@ fun ListForArticles(title: String, articles: List<PocketArticle>) {
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(articles) { article ->
-            ArticleCard(article = article) {}
+            ArticleCard(article = article) { onArticleClicked(article) }
         }
     }
 }
