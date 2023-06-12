@@ -183,10 +183,14 @@ class MainActivity : ComponentActivity() {
                         NavHost(navController, startDestination = "authScreen") {
                             composable("authScreen") { AuthScreen(authViewModel) }
                             composable("home") { HomeScreen(homeViewModel, onArticleClicked = { article ->
-                                navController.navigate("articleScreen/${Uri.encode(article.givenUrl)}")
+                                navController.navigate("articleScreen/${Uri.encode(article.givenUrl)}"){
+                                    isTopBarVisible = false
+                                }
                             }) }
                             composable("search") { SearchScreen(homeViewModel, onArticleClicked = { article ->
-                                navController.navigate("articleScreen/${Uri.encode(article.givenUrl)}")
+                                navController.navigate("articleScreen/${Uri.encode(article.givenUrl)}"){
+                                    isTopBarVisible = false
+                                }
                             }) }
                             composable("settings") { SettingsScreen() }
                             composable("articleScreen/{articleUrl}") { backStackEntry ->
