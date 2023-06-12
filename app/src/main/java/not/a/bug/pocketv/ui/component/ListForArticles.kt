@@ -33,7 +33,8 @@ fun ListForArticles(title: String, articles: List<PocketArticle>) {
     TvLazyRow(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(
-            start = 16.dp
+            start = 16.dp,
+            end = 16.dp
         ),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {

@@ -6,6 +6,7 @@ import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,16 +19,22 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -39,13 +46,14 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import kotlinx.coroutines.launch
 import not.a.bug.pocketv.model.PocketArticle
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun ImmersiveListForArticles(title: String, articles: List<PocketArticle>) {
     if (articles.isNotEmpty()) {
-        val imageHeight = 350.dp
+        val imageHeight = 292.dp
         var listHasFocus by remember { mutableStateOf(false) }
 
         ImmersiveList(
@@ -92,7 +100,7 @@ fun ImmersiveListForArticles(title: String, articles: List<PocketArticle>) {
                             isImageResolved = articles[index].resolvedImage != null
                             Text(
                                 modifier = Modifier
-                                    .padding(16.dp)
+                                    .padding(horizontal = 16.dp)
                                     .background(MaterialTheme.colorScheme.background),
                                 text = title,
                                 style = MaterialTheme.typography.titleMedium,
@@ -189,6 +197,7 @@ fun ImmersiveListForArticles(title: String, articles: List<PocketArticle>) {
                             Column(
                                 Modifier
                                     .padding(horizontal = 16.dp)
+                                    .padding(bottom = 16.dp)
                                     .align(Alignment.CenterStart)
                                     .width(550.dp)
                                     .offset(y = columnOffsetY)
@@ -208,7 +217,7 @@ fun ImmersiveListForArticles(title: String, articles: List<PocketArticle>) {
                                     overflow = TextOverflow.Ellipsis,
                                     color = MaterialTheme.colorScheme.onBackground
                                 )
-                                Spacer(modifier = Modifier.height(32.dp))
+                                Spacer(modifier = Modifier.height(48.dp))
                             }
                         }
                     } else {
@@ -224,16 +233,33 @@ fun ImmersiveListForArticles(title: String, articles: List<PocketArticle>) {
                     }
                 }
             }) {
+            val focusRequester = remember { FocusRequester() }
+            val lazyRowHasFocus = remember { mutableStateOf(listHasFocus) }
+
             TvLazyRow(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
                 contentPadding = PaddingValues(
-                    top = if (listHasFocus) 270.dp else 48.dp,
-                    start = 16.dp
+                    top = if (listHasFocus) 212.dp else 48.dp,
+                    start = 16.dp,
+                    end = 16.dp
                 ),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 itemsIndexed(articles) { index, article ->
-                    ArticleCard(Modifier.immersiveListItem(index), article) {}
+                    var modifier = Modifier.immersiveListItem(index)
+                    if (index == 0) modifier = modifier.focusRequester(focusRequester)
+                    ArticleCard(modifier = modifier, article) {}
+
+                    LaunchedEffect(listHasFocus) {
+                        if (listHasFocus && !lazyRowHasFocus.value) {
+                            try {
+                                focusRequester.requestFocus()
+                            } catch (_: Exception) {
+                            }
+                        }
+                        lazyRowHasFocus.value = listHasFocus
+                    }
                 }
             }
         }
