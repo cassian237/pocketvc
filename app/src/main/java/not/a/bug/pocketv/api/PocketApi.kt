@@ -44,6 +44,7 @@ interface PocketApi {
         @Query("access_token") accessToken: String,
         @Query("state") state: String?,
         @Query("sort") sort: String?,
+        @Query("search") search: String?,
         @Query("detailType") detailType: String?,
         @Query("tag") tag: String?,
         @Query("favorite") favorite: Int?,

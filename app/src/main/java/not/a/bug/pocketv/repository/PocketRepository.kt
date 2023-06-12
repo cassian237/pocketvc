@@ -60,6 +60,7 @@ class PocketRepository(
     suspend fun getItems(
         state: String? = null,
         sort: String? = null,
+        search: String? = null,
         tag: String? = null,
         favorite: Int? = null,
         detailType: String? = null,
@@ -71,7 +72,7 @@ class PocketRepository(
             val accessToken =
                 sessionManager.getAccessToken() ?: throw AccessTokenNotFoundException()
             apiService.getItems(
-                consumerKey, accessToken, state, sort, detailType,
+                consumerKey, accessToken, state, sort, search, detailType,
                 tag,
                 favorite,
                 contentType,

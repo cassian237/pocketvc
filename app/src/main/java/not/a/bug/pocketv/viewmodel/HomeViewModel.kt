@@ -41,6 +41,10 @@ class HomeViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow<Boolean>(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
+    init {
+        loadArticles()
+    }
+
     fun loadArticles() {
         _isLoading.value = true
         viewModelScope.launch {

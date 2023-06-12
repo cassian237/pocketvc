@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Pocketv</string>
+    <string name="search_screen_et_placeholder">Search query</string>
 </resources>

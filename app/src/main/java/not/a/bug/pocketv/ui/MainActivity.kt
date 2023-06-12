@@ -70,6 +70,7 @@ class MainActivity : ComponentActivity() {
             val topBarFocusRequesters = List(size = 4) { FocusRequester() }
             val navController = rememberNavController()
             val authState by authViewModel.authState.collectAsState()
+            var isTopBarVisible by remember { mutableStateOf(true) }
 
             PocketvTheme {
                 Box(
@@ -176,7 +177,7 @@ class MainActivity : ComponentActivity() {
                         NavHost(navController, startDestination = "authScreen") {
                             composable("authScreen") { AuthScreen(authViewModel) }
                             composable("home") { HomeScreen(homeViewModel) }
-                            composable("search") { SearchScreen() }
+                            composable("search") { SearchScreen(homeViewModel) { isTopBarVisible = it } }
                             composable("settings") { SettingsScreen() }
                         }
                     }

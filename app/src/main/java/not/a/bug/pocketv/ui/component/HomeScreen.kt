@@ -28,10 +28,6 @@ fun HomeScreen(homeViewModel: HomeViewModel) {
 
     val isLoading by homeViewModel.isLoading.collectAsState()
 
-    LaunchedEffect(Unit) {
-        homeViewModel.loadArticles()
-    }
-
     Box(modifier = Modifier.fillMaxSize()) {
         when {
             isLoading -> {
