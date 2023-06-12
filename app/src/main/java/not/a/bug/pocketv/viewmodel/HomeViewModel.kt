@@ -45,7 +45,7 @@ class HomeViewModel @Inject constructor(
         loadArticles()
     }
 
-    fun loadArticles() {
+    private fun loadArticles() {
         _isLoading.value = true
         viewModelScope.launch {
             val latestArticlesJob = async { loadCategoryArticles(_latestArticles, state = "unread") }

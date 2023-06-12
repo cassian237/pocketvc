@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
             var isTopBarVisible by remember { mutableStateOf(true) }
 
             navController.addOnDestinationChangedListener { _, destination, _ ->
-                isTopBarVisible = (destination.route != "articleScreen" && destination.route != "authScreen")
+                isTopBarVisible = (destination.route?.contains("articleScreen") == false && destination.route != "authScreen")
             }
 
             PocketvTheme {
@@ -90,13 +90,13 @@ class MainActivity : ComponentActivity() {
                             if (authState.accessToken == null) {
                                 navController.navigate("authScreen")
                             } else {
-                                topBarFocusRequesters[selectedTabIndex].requestFocus()
                                 when (selectedTabIndex) {
                                     0 -> navController.navigate("search")
                                     1 -> navController.navigate("home")
                                     2 -> navController.navigate("settings")
                                     3 -> navController.navigate("settings")
                                 }
+                                topBarFocusRequesters[selectedTabIndex].requestFocus()
                             }
                         }
                     }
@@ -196,7 +196,7 @@ class MainActivity : ComponentActivity() {
                             composable("articleScreen/{articleUrl}") { backStackEntry ->
                                 // Get the articleId from the arguments
                                 val articleUrl = backStackEntry.arguments?.getString("articleUrl")
-                                ArticleScreen(articleUrl = articleUrl)
+                                ArticleScreen(navController, articleUrl = articleUrl)
                             }
                         }
                     }
