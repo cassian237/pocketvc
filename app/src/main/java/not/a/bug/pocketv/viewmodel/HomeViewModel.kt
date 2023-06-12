@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -22,8 +23,20 @@ class HomeViewModel @Inject constructor(
     private val pocketRepository: PocketRepository
 ) : ViewModel() {
 
-    private val _articles = MutableStateFlow<List<PocketArticle>>(emptyList())
-    val articles: StateFlow<List<PocketArticle>> = _articles
+    private val _latestArticles = MutableStateFlow<List<PocketArticle>>(emptyList())
+    val latestArticles: StateFlow<List<PocketArticle>> = _latestArticles
+
+    private val _archivedArticles = MutableStateFlow<List<PocketArticle>>(emptyList())
+    val archivedArticles: StateFlow<List<PocketArticle>> = _archivedArticles
+
+    private val _favoriteArticles = MutableStateFlow<List<PocketArticle>>(emptyList())
+    val favoriteArticles: StateFlow<List<PocketArticle>> = _favoriteArticles
+
+    private val _articleContentType = MutableStateFlow<List<PocketArticle>>(emptyList())
+    val articleContentType: StateFlow<List<PocketArticle>> = _articleContentType
+
+    private val _videoContentType = MutableStateFlow<List<PocketArticle>>(emptyList())
+    val videoContentType: StateFlow<List<PocketArticle>> = _videoContentType
 
     private val _isLoading = MutableStateFlow<Boolean>(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -31,26 +44,37 @@ class HomeViewModel @Inject constructor(
     fun loadArticles() {
         _isLoading.value = true
         viewModelScope.launch {
+            val latestArticlesJob = async { loadCategoryArticles(_latestArticles, state = "unread") }
+            val archivedArticlesJob = async { loadCategoryArticles(_archivedArticles, state = "archive") }
+            val favoriteArticlesJob = async { loadCategoryArticles(_favoriteArticles, favorite = 1) }
+            val articleContentTypeJob = async { loadCategoryArticles(_articleContentType, contentType = "article") }
+            val videoContentTypeJob = async { loadCategoryArticles(_videoContentType, contentType = "video") }
 
-            when (val result = pocketRepository.getItems(detailType = "complete")) {
-                is NetworkResult.Error -> {
-                    _isLoading.value = false
-                }
+            latestArticlesJob.await()
+            archivedArticlesJob.await()
+            favoriteArticlesJob.await()
+            articleContentTypeJob.await()
+            videoContentTypeJob.await()
 
-                is NetworkResult.Loading -> {
-                    _isLoading.value = true
-                }
+            _isLoading.value = false
+        }
+    }
 
-                is NetworkResult.Success -> {
-                    _articles.value = result.data.list.map {
-                        val meta = fetchMeta(it.value.resolvedUrl)
-                        it.value.copy(
-                            resolvedImage = meta.first
-                                ?: it.value.images?.asIterable()?.firstOrNull()?.value?.src,
-                            resolvedUrl = meta.second ?: URI(it.value.resolvedUrl).host
-                        )
-                    }
-                    _isLoading.value = false
+    private suspend fun loadCategoryArticles(flow: MutableStateFlow<List<PocketArticle>>, state: String? = null, favorite: Int? = null, contentType: String? = null) {
+        when (val result = pocketRepository.getItems(state = state, favorite = favorite, contentType = contentType, count = 9, detailType = "complete")) {
+            is NetworkResult.Error -> {
+                // handle error
+            }
+            is NetworkResult.Loading -> {
+                // handle loading
+            }
+            is NetworkResult.Success -> {
+                flow.value = result.data.list.map {
+                    val meta = fetchMeta(it.value.resolvedUrl)
+                    it.value.copy(
+                        resolvedImage = meta.first ?: it.value.images?.asIterable()?.firstOrNull()?.value?.src,
+                        resolvedUrl = meta.second ?: URI(it.value.resolvedUrl).host
+                    )
                 }
             }
         }

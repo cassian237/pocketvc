@@ -44,6 +44,10 @@ interface PocketApi {
         @Query("access_token") accessToken: String,
         @Query("state") state: String?,
         @Query("sort") sort: String?,
-        @Query("detailType") detailType: String?
+        @Query("detailType") detailType: String?,
+        @Query("tag") tag: String?,
+        @Query("favorite") favorite: Int?,
+        @Query("contentType") contentType: String?,
+        @Query("count") count: Int?,
     ): Response<ApiResponse<PocketArticle>>
 }

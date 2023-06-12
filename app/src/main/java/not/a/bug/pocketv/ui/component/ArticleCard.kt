@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -41,15 +42,15 @@ import java.net.URI
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun ArticleCard(
+    modifier: Modifier = Modifier,
     article: PocketArticle,
     onClick: () -> Unit
 ) {
     var isImageResolved by remember { mutableStateOf<Boolean>(article.resolvedImage != null) }
 
-    Card(onClick = onClick) {
+    Card(onClick = onClick, modifier = modifier.width(200.dp)) {
         Column {
             if (isImageResolved) {
-                val image = rememberAsyncImagePainter(model = article.resolvedImage)
                 AsyncImage(
                     model = article.resolvedImage,
                     contentDescription = null,

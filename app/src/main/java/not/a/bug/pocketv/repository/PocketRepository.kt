@@ -40,7 +40,8 @@ class PocketRepository(
     ): NetworkResult<PocketArticle> {
         return responseHandler.safeApiCall {
             val consumerKey = sessionManager.getConsumerKey()
-            val accessToken = sessionManager.getAccessToken() ?: throw AccessTokenNotFoundException()
+            val accessToken =
+                sessionManager.getAccessToken() ?: throw AccessTokenNotFoundException()
             apiService.addItem(article, consumerKey, accessToken)
         }
     }
@@ -50,7 +51,8 @@ class PocketRepository(
     ): NetworkResult<String> {
         return responseHandler.safeApiCall {
             val consumerKey = sessionManager.getConsumerKey()
-            val accessToken = sessionManager.getAccessToken() ?: throw AccessTokenNotFoundException()
+            val accessToken =
+                sessionManager.getAccessToken() ?: throw AccessTokenNotFoundException()
             apiService.modifyItem(action, consumerKey, accessToken)
         }
     }
@@ -58,12 +60,23 @@ class PocketRepository(
     suspend fun getItems(
         state: String? = null,
         sort: String? = null,
-        detailType: String? = null
+        tag: String? = null,
+        favorite: Int? = null,
+        detailType: String? = null,
+        contentType: String? = null,
+        count: Int? = null,
     ): NetworkResult<ApiResponse<PocketArticle>> {
         return responseHandler.safeApiCall {
             val consumerKey = sessionManager.getConsumerKey()
-            val accessToken = sessionManager.getAccessToken() ?: throw AccessTokenNotFoundException()
-            apiService.getItems(consumerKey, accessToken, state, sort, detailType)
+            val accessToken =
+                sessionManager.getAccessToken() ?: throw AccessTokenNotFoundException()
+            apiService.getItems(
+                consumerKey, accessToken, state, sort, detailType,
+                tag,
+                favorite,
+                contentType,
+                count
+            )
         }
     }
 }
