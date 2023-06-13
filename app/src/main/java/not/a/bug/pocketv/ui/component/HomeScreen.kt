@@ -96,7 +96,7 @@ fun HomeScreen(homeViewModel: HomeViewModel, onArticleClicked : (PocketArticle) 
         }
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(isLoading) {
         if(!isLoading) {
             focusRequester.requestFocus()
         }
