@@ -41,6 +41,7 @@ fun HomeScreen(homeViewModel: HomeViewModel, onArticleClicked : (PocketArticle) 
         when {
             isLoading -> {
                 CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.align(Alignment.Center)
                 )
             }

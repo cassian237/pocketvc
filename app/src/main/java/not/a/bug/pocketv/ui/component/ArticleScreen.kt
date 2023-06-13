@@ -141,6 +141,7 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
     if (isLoading) {
         Box(Modifier.fillMaxSize()) {
             CircularProgressIndicator(
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.align(Alignment.Center)
             )
         }

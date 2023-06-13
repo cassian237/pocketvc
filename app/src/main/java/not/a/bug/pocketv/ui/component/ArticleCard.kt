@@ -59,7 +59,7 @@ fun ArticleCard(
         onClick = onClick,
         modifier = modifier
             .width(180.dp),
-        colors = CardDefaults.colors(MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)),
+        colors = CardDefaults.colors(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
         border = CardDefaults.border(focusedBorder =
             Border(
                 border = BorderStroke(

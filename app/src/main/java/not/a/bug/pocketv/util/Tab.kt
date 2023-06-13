@@ -32,7 +32,7 @@ fun PremiumPillIndicator(
     currentTabPosition: DpRect,
     modifier: Modifier = Modifier,
     anyTabFocused: Boolean,
-    activeColor: Color = MaterialTheme.colorScheme.error.copy(alpha = .8f),
+    activeColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = .8f),
     inactiveColor: Color = Color(0xFF484362).copy(alpha = 0.4f)
 ) {
     val width by animateDpAsState(targetValue = currentTabPosition.width)

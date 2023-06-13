@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.tv.material3.Button
 import androidx.tv.material3.ExperimentalTvMaterial3Api
+import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import net.glxn.qrgen.android.QRCode
 import not.a.bug.pocketv.model.NetworkResult
@@ -47,7 +48,8 @@ fun AuthScreen(
             }
 
             is NetworkResult.Loading -> {
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary,)
             }
         }
 

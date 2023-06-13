@@ -109,10 +109,6 @@ class MainActivity : ComponentActivity() {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-
-                            .onFocusChanged {
-                                isTabRowFocused = it.isFocused || it.hasFocus
-                            }
                     ) {
                         FocusGroup(
                             modifier = Modifier
@@ -122,7 +118,9 @@ class MainActivity : ComponentActivity() {
                             if (authState.accessToken != null && isTopBarVisible) {
                                 TabRow(
                                     modifier = Modifier
-                                        .padding(vertical = 16.dp),
+                                        .padding(vertical = 16.dp).onFocusChanged {
+                                            isTabRowFocused = it.isFocused || it.hasFocus
+                                        },
                                     selectedTabIndex = selectedTabIndex,
                                     separator = { Spacer(modifier = Modifier.width(12.dp)) },
                                     indicator = @Composable { tabPositions ->
@@ -133,7 +131,11 @@ class MainActivity : ComponentActivity() {
                                                     anyTabFocused = isTabRowFocused
                                                 )
                                             } else {
-                                                TabRowDefaults.PillIndicator(currentTabPosition = it)
+                                                PremiumPillIndicator(
+                                                    currentTabPosition = it,
+                                                    anyTabFocused = isTabRowFocused
+                                                )
+                                                //TabRowDefaults.PillIndicator(currentTabPosition = it)
                                             }
                                         }
                                     }
@@ -144,6 +146,10 @@ class MainActivity : ComponentActivity() {
                                                 .restorableFocus()
                                                 .height(32.dp)
                                                 .focusRequester(topBarFocusRequesters[index]),
+                                            colors = TabDefaults.pillIndicatorTabColors(
+                                                activeContentColor = MaterialTheme.colorScheme.onBackground,
+                                                focusedContentColor = MaterialTheme.colorScheme.onSurface
+                                            ),
                                             selected = index == selectedTabIndex,
                                             onFocus = { selectedTabIndex = index },
                                         ) {

@@ -39,4 +39,29 @@ https://www.apache.org/licenses/LICENSE-2.0
     <color name="errorContainer">#4B636E</color> <!-- Bleu Gris -->
     <color name="onErrorContainer">#ffffff</color> <!-- Blanc -->
     <color name="border">#d9d9d9</color> <!-- Gris Doux -->
+
+    <color name="light_jetstream_background">#F7F9FA</color> <!-- Fond Clair -->
+    <color name="light_primary">#FF7043</color> <!-- Orange Brûlé -->
+    <color name="light_onPrimary">#525252</color> <!-- Gris Foncé -->
+    <color name="light_primaryContainer">#A9BFD3</color> <!-- Bleu Clair -->
+    <color name="light_onPrimaryContainer">#525252</color> <!-- Gris Foncé -->
+    <color name="light_secondary">#4B636E</color> <!-- Bleu Gris -->
+    <color name="light_onSecondary">#F7F9FA</color> <!-- Fond Clair -->
+    <color name="light_secondaryContainer">#A9BFD3</color> <!-- Bleu Clair -->
+    <color name="light_onSecondaryContainer">#525252</color> <!-- Gris Foncé -->
+    <color name="light_tertiary">#FF7043</color> <!-- Orange Brûlé -->
+    <color name="light_onTertiary">#525252</color> <!-- Gris Foncé -->
+    <color name="light_tertiaryContainer">#4B636E</color> <!-- Bleu Gris -->
+    <color name="light_onTertiaryContainer">#F7F9FA</color> <!-- Fond Clair -->
+    <color name="light_background">#F7F9FA</color> <!-- Fond Clair -->
+    <color name="light_onBackground">#525252</color> <!-- Gris Foncé -->
+    <color name="light_surface">#4B636E</color> <!-- Bleu Clair -->
+    <color name="light_onSurface">#525252</color> <!-- Gris Foncé -->
+    <color name="light_surfaceVariant">#A9BFD3</color> <!-- Bleu Gris -->
+    <color name="light_onSurfaceVariant">#F7F9FA</color> <!-- Fond Clair -->
+    <color name="light_error">#FF7043</color> <!-- Orange Brûlé -->
+    <color name="light_onError">#525252</color> <!-- Gris Foncé -->
+    <color name="light_errorContainer">#A9BFD3</color> <!-- Bleu Clair -->
+    <color name="light_onErrorContainer">#525252</color> <!-- Gris Foncé -->
+    <color name="light_border">#4B636E</color> <!-- Bleu Gris -->
 </resources>

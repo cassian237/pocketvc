@@ -37,20 +37,30 @@ private val DarkColorScheme @Composable get() = darkColorScheme(
     border = colorResource(R.color.border),
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+private val LightColorScheme @Composable get() = lightColorScheme(
+    primary = colorResource(R.color.light_primary),
+    onPrimary = colorResource(R.color.light_onPrimary),
+    primaryContainer = colorResource(R.color.light_primaryContainer),
+    onPrimaryContainer = colorResource(R.color.light_onPrimaryContainer),
+    secondary = colorResource(R.color.light_secondary),
+    onSecondary = colorResource(R.color.light_onSecondary),
+    secondaryContainer = colorResource(R.color.light_secondaryContainer),
+    onSecondaryContainer = colorResource(R.color.light_onSecondaryContainer),
+    tertiary = colorResource(R.color.light_tertiary),
+    onTertiary = colorResource(R.color.light_onTertiary),
+    tertiaryContainer = colorResource(R.color.light_tertiaryContainer),
+    onTertiaryContainer = colorResource(R.color.light_onTertiaryContainer),
+    background = colorResource(R.color.light_background),
+    onBackground = colorResource(R.color.light_onBackground),
+    surface = colorResource(R.color.light_surface),
+    onSurface = colorResource(R.color.light_onSurface),
+    surfaceVariant = colorResource(R.color.light_surfaceVariant),
+    onSurfaceVariant = colorResource(R.color.light_onSurfaceVariant),
+    error = colorResource(R.color.light_error),
+    onError = colorResource(R.color.light_onError),
+    errorContainer = colorResource(R.color.light_errorContainer),
+    onErrorContainer = colorResource(R.color.light_onErrorContainer),
+    border = colorResource(R.color.light_border),
 )
 
 @Composable

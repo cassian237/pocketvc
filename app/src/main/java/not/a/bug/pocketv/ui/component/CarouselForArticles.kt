@@ -74,7 +74,7 @@ fun CarouselForArticle(articles: List<PocketArticle>, onArticleClicked : (Pocket
             )
         }
         CarouselItem(modifier = Modifier
-            .border(1.dp, Color.White.copy(alpha = 0.5f), JetStreamCardShape),
+            .border(1.dp, MaterialTheme.colorScheme.border.copy(alpha = 0.5f), JetStreamCardShape),
             background = {
                 Box(
                     modifier = Modifier
@@ -188,7 +188,6 @@ fun CarouselForArticle(articles: List<PocketArticle>, onArticleClicked : (Pocket
                     onClick = { onArticleClicked(article) },
                     modifier = Modifier
                         .onFocusChanged { isFocused = it.isFocused }
-
                         .padding(vertical = 2.dp, horizontal = 5.dp)
                 ) {
                     Text(text = "Read")
