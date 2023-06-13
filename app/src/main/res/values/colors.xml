@@ -15,31 +15,28 @@ https://www.apache.org/licenses/LICENSE-2.0
  limitations under the License.
 -->
 <resources>
-    <color name="jetstream_background">#242C54</color>
-    <color name="primary">#545299</color>
-    <color name="onPrimary">#E2C2BF</color>
-    <color name="primaryContainer">#4F2481</color>
-    <color name="onPrimaryContainer">#E2C2BF</color>
-    <color name="secondary">#90A6CE</color>
-    <color name="onSecondary">#242C54</color>
-    <color name="secondaryContainer">#545299</color>
-    <color name="onSecondaryContainer">#F5E2E0</color>
-    <color name="tertiary">#4F2481</color>
-    <color name="onTertiary">#F5E2E0</color>
-    <color name="tertiaryContainer">#90A6CE</color>
-    <color name="onTertiaryContainer">#242C54</color>
-    <color name="background">#242C54</color>
-    <color name="onBackground">#E2C2BF</color>
-    <color name="surface">#242C54</color>
-    <color name="onSurface">#F5E2E0</color>
-    <color name="surfaceVariant">#545299</color>
-    <color name="onSurfaceVariant">#F5E2E0</color>
-    <color name="error">#DD6885</color>
-    <color name="onError">#242C54</color>
-    <color name="errorContainer">#4F2481</color>
-    <color name="onErrorContainer">#DD6885</color>
-    <color name="border">#545299</color>
-
-    <color name="message_received_background_color_night">#25303F</color>
-    <color name="message_sent_background_color_night">#486991</color>
+    <color name="jetstream_background">#17202A</color> <!-- Bleu Profond Gris -->
+    <color name="primary">#FF7043</color> <!-- Orange Brûlé -->
+    <color name="onPrimary">#17202A</color> <!-- Bleu Profond Gris -->
+    <color name="primaryContainer">#4B636E</color> <!-- Bleu Gris -->
+    <color name="onPrimaryContainer">#ffffff</color> <!-- Blanc -->
+    <color name="secondary">#d9d9d9</color> <!-- Gris Doux -->
+    <color name="onSecondary">#17202A</color> <!-- Bleu Profond Gris -->
+    <color name="secondaryContainer">#4B636E</color> <!-- Bleu Gris -->
+    <color name="onSecondaryContainer">#ffffff</color> <!-- Blanc -->
+    <color name="tertiary">#FF7043</color> <!-- Orange Brûlé -->
+    <color name="onTertiary">#17202A</color> <!-- Bleu Profond Gris -->
+    <color name="tertiaryContainer">#d9d9d9</color> <!-- Gris Doux -->
+    <color name="onTertiaryContainer">#17202A</color> <!-- Bleu Profond Gris -->
+    <color name="background">#17202A</color> <!-- Bleu Profond Gris -->
+    <color name="onBackground">#ffffff</color> <!-- Blanc -->
+    <color name="surface">#4B636E</color> <!-- Bleu Gris -->
+    <color name="onSurface">#ffffff</color> <!-- Blanc -->
+    <color name="surfaceVariant">#4B636E</color> <!-- Gris Doux -->
+    <color name="onSurfaceVariant">#17202A</color> <!-- Bleu Profond Gris -->
+    <color name="error">#FF7043</color> <!-- Orange Brûlé -->
+    <color name="onError">#ffffff</color> <!-- Blanc -->
+    <color name="errorContainer">#4B636E</color> <!-- Bleu Gris -->
+    <color name="onErrorContainer">#ffffff</color> <!-- Blanc -->
+    <color name="border">#d9d9d9</color> <!-- Gris Doux -->
 </resources>

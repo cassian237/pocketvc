@@ -1,6 +1,7 @@
 package not.a.bug.pocketv.ui.component
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -21,14 +22,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.tv.material3.Border
 import androidx.tv.material3.Card
+import androidx.tv.material3.CardDefaults
+import androidx.tv.material3.CarouselDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
+import androidx.tv.material3.Glow
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
@@ -48,8 +55,21 @@ fun ArticleCard(
 ) {
     var isImageResolved by remember { mutableStateOf<Boolean>(article.resolvedImage != null) }
 
-    Card(onClick = onClick, modifier = modifier.width(200.dp)) {
-        Column {
+    Card(
+        onClick = onClick,
+        modifier = modifier
+            .width(180.dp),
+        colors = CardDefaults.colors(MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)),
+        border = CardDefaults.border(focusedBorder =
+            Border(
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.border
+                )
+            )
+        )
+    ) {
+        Column(Modifier.blur(radius = 8.dp)) {
             if (isImageResolved) {
                 AsyncImage(
                     model = article.resolvedImage,
@@ -59,7 +79,7 @@ fun ArticleCard(
                         .fillMaxWidth()
                         .aspectRatio(16f / 9f),
                     onState = { state ->
-                        if(state is AsyncImagePainter.State.Error) {
+                        if (state is AsyncImagePainter.State.Error) {
                             isImageResolved = false
                         }
                     }
@@ -92,7 +112,7 @@ fun ArticleCard(
 
             Text(
                 text = article.resolvedTitle,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.onSurface),
                 lineHeight = 16.sp,
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
@@ -104,7 +124,7 @@ fun ArticleCard(
 
             Text(
                 text = article.resolvedUrl,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onSurface),
                 modifier = Modifier
                     .padding(bottom = 8.dp)
                     .padding(horizontal = 8.dp)

@@ -15,9 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.material3.ExperimentalTvMaterial3Api
+import androidx.tv.material3.MaterialTheme
+import androidx.tv.material3.Text
 import not.a.bug.pocketv.model.PocketArticle
 import not.a.bug.pocketv.viewmodel.HomeViewModel
 
@@ -43,26 +46,51 @@ fun HomeScreen(homeViewModel: HomeViewModel, onArticleClicked : (PocketArticle) 
             }
 
             else -> {
-                TvLazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    content = {
-                        item {
-                            ImmersiveListForArticles(Modifier.focusRequester(focusRequester),"Latest Articles", latestArticles, onArticleClicked)
-                        }
-                        item {
-                            ListForArticles("Archived Articles", archivedArticles, onArticleClicked)
-                        }
-                        item {
-                            ListForArticles("Favorite Articles", favoriteArticles, onArticleClicked)
-                        }
-                        item {
-                            ListForArticles("Articles", articleContentType, onArticleClicked)
-                        }
-                        item {
-                            ListForArticles("Videos", videoContentType, onArticleClicked)
-                        }
-                        item { Spacer(modifier = Modifier.height(16.dp)) }
-                    })
+                if(latestArticles.isEmpty() &&
+                    archivedArticles.isEmpty() &&
+                    favoriteArticles.isEmpty() &&
+                    articleContentType.isEmpty() &&
+                    videoContentType.isEmpty()) {
+                    Text(
+                        modifier = Modifier.align(Alignment.Center),
+                        text = "You have no item (empty message)",
+                        style = MaterialTheme.typography.headlineMedium.copy(MaterialTheme.colorScheme.onBackground)
+                    )
+                } else {
+                    TvLazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        content = {
+                            item {
+                                ImmersiveListForArticles(
+                                    Modifier.focusRequester(focusRequester),
+                                    "Latest Articles",
+                                    latestArticles,
+                                    onArticleClicked
+                                )
+                            }
+                            item {
+                                ListForArticles(
+                                    "Archived Articles",
+                                    archivedArticles,
+                                    onArticleClicked
+                                )
+                            }
+                            item {
+                                ListForArticles(
+                                    "Favorite Articles",
+                                    favoriteArticles,
+                                    onArticleClicked
+                                )
+                            }
+                            item {
+                                ListForArticles("Articles", articleContentType, onArticleClicked)
+                            }
+                            item {
+                                ListForArticles("Videos", videoContentType, onArticleClicked)
+                            }
+                            item { Spacer(modifier = Modifier.height(16.dp)) }
+                        })
+                }
             }
         }
     }
