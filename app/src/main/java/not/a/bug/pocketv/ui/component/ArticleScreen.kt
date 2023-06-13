@@ -135,6 +135,7 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
     BackHandler(listState.canScrollBackward) {
         coroutineScope.launch {
             listState.animateScrollToItem(0)
+            firstFocusRequester.requestFocus()
         }
     }
 
