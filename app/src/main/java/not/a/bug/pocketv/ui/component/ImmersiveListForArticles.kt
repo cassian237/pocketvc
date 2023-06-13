@@ -52,6 +52,7 @@ import not.a.bug.pocketv.model.PocketArticle
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun ImmersiveListForArticles(
+    modifier: Modifier = Modifier,
     title: String,
     articles: List<PocketArticle>,
     onArticleClicked: (PocketArticle) -> Unit
@@ -61,6 +62,7 @@ fun ImmersiveListForArticles(
         var listHasFocus by remember { mutableStateOf(false) }
 
         ImmersiveList(
+            modifier = modifier,
             background = { index, hasFocus ->
                 val article = articles[index]
                 listHasFocus = hasFocus

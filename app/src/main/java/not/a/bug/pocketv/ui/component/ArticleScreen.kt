@@ -206,7 +206,7 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
 
                             Key.DirectionDown -> {
                                 coroutineScope.launch {
-                                    listState.animateScrollBy(150f)
+                                    listState.animateScrollBy(100f)
                                 }
                                 true
                             }

@@ -10,8 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.material3.ExperimentalTvMaterial3Api
@@ -29,6 +32,8 @@ fun HomeScreen(homeViewModel: HomeViewModel, onArticleClicked : (PocketArticle) 
 
     val isLoading by homeViewModel.isLoading.collectAsState()
 
+    val focusRequester = remember { FocusRequester() }
+
     Box(modifier = Modifier.fillMaxSize()) {
         when {
             isLoading -> {
@@ -42,7 +47,7 @@ fun HomeScreen(homeViewModel: HomeViewModel, onArticleClicked : (PocketArticle) 
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     content = {
                         item {
-                            ImmersiveListForArticles("Latest Articles", latestArticles, onArticleClicked)
+                            ImmersiveListForArticles(Modifier.focusRequester(focusRequester),"Latest Articles", latestArticles, onArticleClicked)
                         }
                         item {
                             ListForArticles("Archived Articles", archivedArticles, onArticleClicked)
@@ -59,6 +64,12 @@ fun HomeScreen(homeViewModel: HomeViewModel, onArticleClicked : (PocketArticle) 
                         item { Spacer(modifier = Modifier.height(16.dp)) }
                     })
             }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        if(!isLoading) {
+            focusRequester.requestFocus()
         }
     }
 }
