@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Pocketv</string>
     <string name="search_screen_et_placeholder">Search query</string>
+
+    <string name="settings">Preferences</string>
+    <string name="settings_subtitle">Select your preferences to personalize your experience.</string>
+    <string name="color_theme">Dark theme</string>
+    <string name="log_out">Sign Out</string>
 </resources>
