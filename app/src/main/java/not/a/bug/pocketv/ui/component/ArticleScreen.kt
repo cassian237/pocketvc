@@ -82,12 +82,8 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
     var displayWebView by remember { mutableStateOf(false) }
 
     BackHandler(listState.canScrollBackward) {
-        if (listState.canScrollBackward) {
-            coroutineScope.launch {
-                listState.animateScrollToItem(0)
-            }
-        } else {
-            navController.navigateUp()
+        coroutineScope.launch {
+            listState.animateScrollToItem(0)
         }
     }
 
