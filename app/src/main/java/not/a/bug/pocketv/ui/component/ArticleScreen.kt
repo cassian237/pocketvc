@@ -1,8 +1,11 @@
 package not.a.bug.pocketv.ui.component
 
 import android.util.Base64
+import android.util.Log
 import android.webkit.WebView
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.animateScrollBy
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,12 +25,20 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,6 +52,10 @@ import androidx.tv.material3.IconButton
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import not.a.bug.pocketv.viewmodel.ArticleViewModel
 
 @OptIn(ExperimentalTvMaterial3Api::class)
@@ -55,6 +70,7 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
     val onBackgroundColor = colors.onBackground.toHex()
     val listState = rememberTvLazyListState()
     val firstFocusRequester = remember { FocusRequester() }
+    val coroutineScope = rememberCoroutineScope()
 
     if (isLoading) {
         Box(Modifier.fillMaxSize()) {
@@ -94,6 +110,27 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
                 state = listState,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
+                    .onKeyEvent { keyEvent ->
+                        when (keyEvent.key) {
+                            Key.DirectionUp -> {
+                                if (listState.canScrollBackward) {
+                                    coroutineScope.launch {
+                                        listState.animateScrollBy(-150f)
+                                    }
+                                    true
+                                } else false
+                            }
+
+                            Key.DirectionDown -> {
+                                coroutineScope.launch {
+                                    listState.animateScrollBy(150f)
+                                }
+                                true
+                            }
+
+                            else -> false
+                        }
+                    }
                     .focusable()
             ) {
                 item {
@@ -120,6 +157,7 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
                     AndroidView(
                         factory = { context ->
                             WebView(context).apply {
+                                settings.javaScriptEnabled = true
                                 val base64: String =
                                     Base64.encodeToString(
                                         """
