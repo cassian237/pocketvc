@@ -19,7 +19,7 @@ package not.a.bug.pocketv.ui.theme
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.ShapeDefaults
 
-val JetStreamCardShape = ShapeDefaults.ExtraSmall
+val JetStreamCardShape = ShapeDefaults.Small
 val JetStreamButtonShape = ShapeDefaults.ExtraSmall
 val IconSize = 20.dp
 val JetStreamBorderWidth = 3.dp

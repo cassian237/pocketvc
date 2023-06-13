@@ -38,7 +38,7 @@ https://www.apache.org/licenses/LICENSE-2.0
     <color name="onError">#ffffff</color> <!-- Blanc -->
     <color name="errorContainer">#4B636E</color> <!-- Bleu Gris -->
     <color name="onErrorContainer">#ffffff</color> <!-- Blanc -->
-    <color name="border">#d9d9d9</color> <!-- Gris Doux -->
+    <color name="border">#FF7043</color> <!-- Gris Doux -->
 
     <color name="light_jetstream_background">#F7F9FA</color> <!-- Fond Clair -->
     <color name="light_primary">#FF7043</color> <!-- Orange Brûlé -->
@@ -63,5 +63,5 @@ https://www.apache.org/licenses/LICENSE-2.0
     <color name="light_onError">#525252</color> <!-- Gris Foncé -->
     <color name="light_errorContainer">#A9BFD3</color> <!-- Bleu Clair -->
     <color name="light_onErrorContainer">#525252</color> <!-- Gris Foncé -->
-    <color name="light_border">#4B636E</color> <!-- Bleu Gris -->
+    <color name="light_border">#FF7043</color> <!-- Bleu Gris -->
 </resources>

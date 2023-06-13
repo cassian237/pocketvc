@@ -63,7 +63,7 @@ fun ArticleCard(
         border = CardDefaults.border(focusedBorder =
             Border(
                 border = BorderStroke(
-                    width = 1.dp,
+                    width = 2.dp,
                     color = MaterialTheme.colorScheme.border
                 )
             )

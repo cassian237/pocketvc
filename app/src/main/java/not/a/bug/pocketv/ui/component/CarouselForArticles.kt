@@ -74,7 +74,7 @@ fun CarouselForArticle(articles: List<PocketArticle>, onArticleClicked : (Pocket
             )
         }
         CarouselItem(modifier = Modifier
-            .border(1.dp, MaterialTheme.colorScheme.border.copy(alpha = 0.5f), JetStreamCardShape),
+            .border(2.dp, MaterialTheme.colorScheme.border.copy(alpha = 0.5f), JetStreamCardShape),
             background = {
                 Box(
                     modifier = Modifier

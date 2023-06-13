@@ -2,6 +2,7 @@ package not.a.bug.pocketv.ui.component
 
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
@@ -27,6 +28,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -91,6 +93,17 @@ fun ImmersiveListForArticles(
                     },
                     label = "column offset Y"
                 ) { focused -> if (focused) 0.dp else 300.dp }
+
+                val alpha by columnEnterTransition.animateFloat(
+                    transitionSpec = {
+                        if (hasFocus) {
+                            tween(500)
+                        } else {
+                            snap()
+                        }
+                    },
+                    label = "alpha"
+                ) { focused -> if (focused) 1f else 0f }
 
                 Box(
                     Modifier
@@ -207,6 +220,7 @@ fun ImmersiveListForArticles(
                                     .align(Alignment.CenterStart)
                                     .width(550.dp)
                                     .offset(y = columnOffsetY)
+                                    .alpha(alpha)
                             ) {
                                 Text(
                                     text = articles[index].resolvedTitle,
