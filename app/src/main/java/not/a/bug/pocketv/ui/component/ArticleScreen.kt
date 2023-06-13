@@ -3,6 +3,10 @@ package not.a.bug.pocketv.ui.component
 import android.util.Base64
 import android.util.Log
 import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.gestures.scrollBy
@@ -20,12 +24,14 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +45,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -72,6 +79,18 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
     val firstFocusRequester = remember { FocusRequester() }
     val coroutineScope = rememberCoroutineScope()
 
+    var displayWebView by remember { mutableStateOf(false) }
+
+    BackHandler(listState.canScrollBackward) {
+        if (listState.canScrollBackward) {
+            coroutineScope.launch {
+                listState.animateScrollToItem(0)
+            }
+        } else {
+            navController.navigateUp()
+        }
+    }
+
     if (isLoading) {
         Box(Modifier.fillMaxSize()) {
             CircularProgressIndicator(
@@ -94,15 +113,19 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
                 Spacer(modifier = Modifier.width(16.dp))
                 Button(
                     modifier = Modifier.focusRequester(firstFocusRequester),
-                    onClick = { /* TODO: Implement WebView navigation */ },
+                    onClick = {
+                        displayWebView = !displayWebView
+                    }, // Toggle the display mode when the button is clicked
                 ) {
-                    Text(text = "Open in WebView")
+                    Text(text = if (displayWebView) "Open as Text" else "Open in WebView") // Change the button text based on the display mode
                 }
-                Spacer(modifier = Modifier.width(16.dp))
-                Button(
-                    onClick = { /* TODO: Listen */ },
-                ) {
-                    Text(text = "Listen")
+                if (!displayWebView) {
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Button(
+                        onClick = { /* TODO: Listen */ },
+                    ) {
+                        Text(text = "Listen")
+                    }
                 }
             }
 
@@ -134,33 +157,44 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
                     .focusable()
             ) {
                 item {
-
-                    Text(
-                        text = parsedArticle.title,
-                        style = MaterialTheme.typography.headlineMedium.copy(color = colors.onBackground),
-                        modifier = Modifier.padding(top = 16.dp),
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    if (parsedArticle.leadImageUrl.isNotEmpty()) {
-                        AsyncImage(
-                            model = parsedArticle.leadImageUrl,
-                            contentDescription = "Lead Image",
-                            modifier = Modifier
-                                .height(200.dp)
-                                .fillMaxWidth()
-                                .clip(shape = RoundedCornerShape(4.dp))
+                    if (displayWebView) {
+                        AndroidView(
+                            factory = { context ->
+                                WebView(context).apply {
+                                    webViewClient = WebViewClient()
+                                    settings.javaScriptEnabled = true
+                                    loadUrl(articleUrl ?: "")
+                                }
+                            },
+                            modifier = Modifier.padding(top = 16.dp)
                         )
-                    }
+                    } else {
+                        Text(
+                            text = parsedArticle.title,
+                            style = MaterialTheme.typography.headlineMedium.copy(color = colors.onBackground),
+                            modifier = Modifier.padding(top = 16.dp),
+                        )
 
-                    AndroidView(
-                        factory = { context ->
-                            WebView(context).apply {
-                                settings.javaScriptEnabled = true
-                                val base64: String =
-                                    Base64.encodeToString(
-                                        """
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        if (parsedArticle.leadImageUrl.isNotEmpty()) {
+                            AsyncImage(
+                                model = parsedArticle.leadImageUrl,
+                                contentDescription = "Lead Image",
+                                modifier = Modifier
+                                    .height(200.dp)
+                                    .fillMaxWidth()
+                                    .clip(shape = RoundedCornerShape(4.dp))
+                            )
+                        }
+
+                        AndroidView(
+                            factory = { context ->
+                                WebView(context).apply {
+                                    settings.javaScriptEnabled = true
+                                    val base64: String =
+                                        Base64.encodeToString(
+                                            """
                                     <html>
                                     <head>
                                         <style>
@@ -175,13 +209,14 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
                                     </body>
                                     </html>
                                     """.trimIndent().toByteArray(),
-                                        Base64.DEFAULT
-                                    )
-                                loadData(base64, "text/html; charset=utf-8", "base64")
-                            }
-                        },
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
+                                            Base64.DEFAULT
+                                        )
+                                    loadData(base64, "text/html; charset=utf-8", "base64")
+                                }
+                            },
+                            modifier = Modifier.padding(top = 16.dp)
+                        )
+                    }
                 }
             }
         }
