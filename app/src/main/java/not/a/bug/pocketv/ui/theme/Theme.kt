@@ -61,14 +61,18 @@ private val LightColorScheme @Composable get() = lightColorScheme(
     errorContainer = colorResource(R.color.light_errorContainer),
     onErrorContainer = colorResource(R.color.light_onErrorContainer),
     border = colorResource(R.color.light_border),
+    inverseSurface = colorResource(R.color.light_inverse_surface_color),
 )
 
 @Composable
 fun PocketvTheme(
+    darkTheme: Boolean,
     content: @Composable () -> Unit
 ) {
+    val colors = if (darkTheme) DarkColorScheme else LightColorScheme
+
     MaterialTheme(
-        colorScheme = DarkColorScheme,
+        colorScheme = colors,
         shapes = MaterialTheme.shapes,
         typography = Typography,
         content = content

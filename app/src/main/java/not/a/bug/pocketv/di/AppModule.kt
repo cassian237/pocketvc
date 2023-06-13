@@ -1,6 +1,7 @@
 package not.a.bug.pocketv.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -83,5 +84,11 @@ object AppModule {
         sessionManager: SessionManager
     ): MercuryParserRepository {
         return MercuryParserRepository(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+        return context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
     }
 }

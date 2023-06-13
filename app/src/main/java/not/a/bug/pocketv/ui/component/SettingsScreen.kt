@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,14 +31,14 @@ import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
 import not.a.bug.pocketv.R
 import not.a.bug.pocketv.ui.theme.JetStreamCardShape
+import not.a.bug.pocketv.viewmodel.SettingsViewModel
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun SettingsScreen(
-) {
+fun SettingsScreen(settingsViewModel: SettingsViewModel) {
     val focusRequester = remember { FocusRequester() }
     var isFirstPopulation by rememberSaveable { mutableStateOf(true) }
-    var isDarkTheme = remember { mutableStateOf(true) }
+    val isDarkTheme by settingsViewModel.isDarkTheme.collectAsState()
 
     Row() {
         Column(
@@ -74,7 +75,7 @@ fun SettingsScreen(
                             )
                         ),
                         onClick = {
-                            isDarkTheme.value = !isDarkTheme.value
+                            settingsViewModel.toggleTheme()
                         }
                     ) {
                         Row(
@@ -93,7 +94,7 @@ fun SettingsScreen(
                             Spacer(modifier = Modifier.weight(1f))
 
                             Switch(
-                                checked = isDarkTheme.value,
+                                checked = isDarkTheme,
                                 onCheckedChange = {  },
                                 colors = SwitchDefaults.colors(
                                     checkedThumbColor = MaterialTheme.colorScheme.primary,

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
@@ -39,12 +37,10 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Tab
 import androidx.tv.material3.TabDefaults
 import androidx.tv.material3.TabRow
-import androidx.tv.material3.TabRowDefaults
 import androidx.tv.material3.Text
 import dagger.hilt.android.AndroidEntryPoint
 import not.a.bug.notificationcenter.util.FocusGroup
 import not.a.bug.notificationcenter.util.PremiumPillIndicator
-import not.a.bug.pocketv.model.PocketArticle
 import not.a.bug.pocketv.ui.component.ArticleScreen
 import not.a.bug.pocketv.ui.component.AuthScreen
 import not.a.bug.pocketv.ui.component.HomeScreen
@@ -53,6 +49,7 @@ import not.a.bug.pocketv.ui.component.SettingsScreen
 import not.a.bug.pocketv.ui.theme.PocketvTheme
 import not.a.bug.pocketv.viewmodel.AuthViewModel
 import not.a.bug.pocketv.viewmodel.HomeViewModel
+import not.a.bug.pocketv.viewmodel.SettingsViewModel
 
 @OptIn(ExperimentalTvFoundationApi::class)
 @AndroidEntryPoint
@@ -60,6 +57,7 @@ class MainActivity : ComponentActivity() {
 
     private val authViewModel: AuthViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
+    private val settingsViewModel: SettingsViewModel by viewModels()
 
     @OptIn(ExperimentalTvMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,13 +72,15 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val authState by authViewModel.authState.collectAsState()
             var isTopBarVisible by remember { mutableStateOf(true) }
+            val isDarkTheme by settingsViewModel.isDarkTheme.collectAsState()
+
 
             navController.addOnDestinationChangedListener { _, destination, _ ->
                 isTopBarVisible =
                     (destination.route?.contains("articleScreen") == false && destination.route != "authScreen")
             }
 
-            PocketvTheme {
+            PocketvTheme(isDarkTheme) {
                 Box(
                     Modifier
                         .fillMaxWidth()
@@ -207,7 +207,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 })
                             }
-                            composable("settings") { SettingsScreen() }
+                            composable("settings") { SettingsScreen(settingsViewModel) }
                             composable("articleScreen/{articleUrl}") { backStackEntry ->
                                 // Get the articleId from the arguments
                                 val articleUrl = backStackEntry.arguments?.getString("articleUrl")
