@@ -3,22 +3,30 @@ package not.a.bug.pocketv.ui.component
 import android.util.Base64
 import android.webkit.WebView
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -41,20 +49,27 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
 
     val articleViewModel = hiltViewModel<ArticleViewModel>()
     val article by articleViewModel.article.collectAsState()
+    val isLoading by articleViewModel.isLoading.collectAsState()
     val colors = MaterialTheme.colorScheme
     val backgroundColor = colors.background.toHex()
     val onBackgroundColor = colors.onBackground.toHex()
     val listState = rememberTvLazyListState()
+    val firstFocusRequester = remember { FocusRequester() }
 
-
-    LaunchedEffect(Unit) {
-        articleUrl?.let { articleViewModel.getArticleDetail(it) }
+    if (isLoading) {
+        Box(Modifier.fillMaxSize()) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
     }
 
     article?.let { parsedArticle ->
-        Column(modifier = Modifier
-            .padding(16.dp)) {
-            Row {
+        Column {
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+            ) {
                 IconButton(
                     onClick = { navController.navigateUp() },
                 ) {
@@ -62,6 +77,7 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Button(
+                    modifier = Modifier.focusRequester(firstFocusRequester),
                     onClick = { /* TODO: Implement WebView navigation */ },
                 ) {
                     Text(text = "Open in WebView")
@@ -131,6 +147,13 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
                 }
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        articleUrl?.let { articleViewModel.getArticleDetail(it) }
+    }
+    LaunchedEffect(article) {
+        article?.let { firstFocusRequester.requestFocus() }
     }
 }
 

@@ -75,7 +75,8 @@ class MainActivity : ComponentActivity() {
             var isTopBarVisible by remember { mutableStateOf(true) }
 
             navController.addOnDestinationChangedListener { _, destination, _ ->
-                isTopBarVisible = (destination.route?.contains("articleScreen") == false && destination.route != "authScreen")
+                isTopBarVisible =
+                    (destination.route?.contains("articleScreen") == false && destination.route != "authScreen")
             }
 
             PocketvTheme {
@@ -96,7 +97,10 @@ class MainActivity : ComponentActivity() {
                                     2 -> navController.navigate("settings")
                                     3 -> navController.navigate("settings")
                                 }
-                                topBarFocusRequesters[selectedTabIndex].requestFocus()
+                                try {
+                                    topBarFocusRequesters[selectedTabIndex].requestFocus()
+                                } catch (_: Exception) {
+                                }
                             }
                         }
                     }
@@ -182,16 +186,20 @@ class MainActivity : ComponentActivity() {
 
                         NavHost(navController, startDestination = "authScreen") {
                             composable("authScreen") { AuthScreen(authViewModel) }
-                            composable("home") { HomeScreen(homeViewModel, onArticleClicked = { article ->
-                                navController.navigate("articleScreen/${Uri.encode(article.givenUrl)}"){
-                                    isTopBarVisible = false
-                                }
-                            }) }
-                            composable("search") { SearchScreen(homeViewModel, onArticleClicked = { article ->
-                                navController.navigate("articleScreen/${Uri.encode(article.givenUrl)}"){
-                                    isTopBarVisible = false
-                                }
-                            }) }
+                            composable("home") {
+                                HomeScreen(homeViewModel, onArticleClicked = { article ->
+                                    navController.navigate("articleScreen/${Uri.encode(article.givenUrl)}") {
+                                        isTopBarVisible = false
+                                    }
+                                })
+                            }
+                            composable("search") {
+                                SearchScreen(homeViewModel, onArticleClicked = { article ->
+                                    navController.navigate("articleScreen/${Uri.encode(article.givenUrl)}") {
+                                        isTopBarVisible = false
+                                    }
+                                })
+                            }
                             composable("settings") { SettingsScreen() }
                             composable("articleScreen/{articleUrl}") { backStackEntry ->
                                 // Get the articleId from the arguments
