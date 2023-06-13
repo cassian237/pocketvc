@@ -105,6 +105,13 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
+                    LaunchedEffect(Unit) {
+                        try {
+                            topBarFocusRequesters[selectedTabIndex].requestFocus()
+                        } catch (_: Exception) {
+                        }
+                    }
+
                     Column(
                         modifier = Modifier
                             .fillMaxSize()

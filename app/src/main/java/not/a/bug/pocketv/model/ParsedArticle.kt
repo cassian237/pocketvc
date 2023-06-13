@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName
 
 data class ParsedArticle(
     @SerializedName("title")
-    val title: String,
+    val title: String?,
 
     @SerializedName("author")
-    val author: String,
+    val author: String?,
 
     @SerializedName("date_published")
     val datePublished: String?,
@@ -16,10 +16,10 @@ data class ParsedArticle(
     val dek: String?,
 
     @SerializedName("lead_image_url")
-    val leadImageUrl: String,
+    val leadImageUrl: String?,
 
     @SerializedName("content")
-    val content: String,
+    val content: String?,
 
     @SerializedName("next_page_url")
     val nextPageUrl: String?,
@@ -31,13 +31,13 @@ data class ParsedArticle(
     val domain: String,
 
     @SerializedName("excerpt")
-    val excerpt: String,
+    val excerpt: String?,
 
     @SerializedName("word_count")
     val wordCount: Int,
 
     @SerializedName("direction")
-    val direction: String,
+    val direction: String?,
 
     @SerializedName("total_pages")
     val totalPages: Int,
