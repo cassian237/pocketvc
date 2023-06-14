@@ -14,7 +14,7 @@ class SettingsViewModel @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
     private val _isDarkTheme = MutableStateFlow(
-        sharedPreferences.getBoolean("isDarkTheme", false)
+        sharedPreferences.getBoolean("isDarkTheme", true)
     )
     val isDarkTheme: StateFlow<Boolean> = _isDarkTheme
 

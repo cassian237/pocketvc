@@ -6,4 +6,7 @@
     <string name="settings_subtitle">Select your preferences to personalize your experience.</string>
     <string name="color_theme">Dark theme</string>
     <string name="log_out">Sign Out</string>
+
+    <string name="auth_title">Welcome to Your Pocket on Android TV!</string>
+    <string name="auth_subtitle">Scan the QR code, sign in, and start enjoying your favorite content in no time.\nLet\'s get started!</string>
 </resources>
