@@ -66,6 +66,7 @@ class PocketRepository(
         detailType: String? = null,
         contentType: String? = null,
         count: Int? = null,
+        since: Long? = null
     ): NetworkResult<ApiResponse<PocketArticle>> {
         return responseHandler.safeApiCall {
             val consumerKey = sessionManager.getConsumerKey()

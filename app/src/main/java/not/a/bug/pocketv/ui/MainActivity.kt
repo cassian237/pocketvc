@@ -41,6 +41,7 @@ import androidx.tv.material3.Text
 import dagger.hilt.android.AndroidEntryPoint
 import not.a.bug.notificationcenter.util.FocusGroup
 import not.a.bug.notificationcenter.util.PremiumPillIndicator
+import not.a.bug.pocketv.SessionManager
 import not.a.bug.pocketv.ui.component.ArticleScreen
 import not.a.bug.pocketv.ui.component.AuthScreen
 import not.a.bug.pocketv.ui.component.HomeScreen
@@ -50,6 +51,7 @@ import not.a.bug.pocketv.ui.theme.PocketvTheme
 import not.a.bug.pocketv.viewmodel.AuthViewModel
 import not.a.bug.pocketv.viewmodel.HomeViewModel
 import not.a.bug.pocketv.viewmodel.SettingsViewModel
+import javax.inject.Inject
 
 @OptIn(ExperimentalTvFoundationApi::class)
 @AndroidEntryPoint
@@ -58,6 +60,9 @@ class MainActivity : ComponentActivity() {
     private val authViewModel: AuthViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
     private val settingsViewModel: SettingsViewModel by viewModels()
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     @OptIn(ExperimentalTvMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +75,7 @@ class MainActivity : ComponentActivity() {
             var isTabRowFocused by remember { mutableStateOf(false) }
             val topBarFocusRequesters = List(size = 4) { FocusRequester() }
             val navController = rememberNavController()
-            val authState by authViewModel.authState.collectAsState()
+            val authState by sessionManager.authState.collectAsState()
             var isTopBarVisible by remember { mutableStateOf(true) }
             val isDarkTheme by settingsViewModel.isDarkTheme.collectAsState()
 
@@ -87,8 +92,7 @@ class MainActivity : ComponentActivity() {
                         .background(MaterialTheme.colorScheme.background)
                 ) {
 
-                    LaunchedEffect(authViewModel.authState, selectedTabIndex) {
-                        authViewModel.authState.collect { authState ->
+                    LaunchedEffect(authState, selectedTabIndex) {
                             if (authState.accessToken == null) {
                                 navController.navigate("authScreen")
                             } else {
@@ -103,7 +107,6 @@ class MainActivity : ComponentActivity() {
                                 } catch (_: Exception) {
                                 }
                             }
-                        }
                     }
 
                     Column(

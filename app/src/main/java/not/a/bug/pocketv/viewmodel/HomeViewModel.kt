@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import not.a.bug.pocketv.SessionManager
+import not.a.bug.pocketv.model.AccessTokenNotFoundException
 import not.a.bug.pocketv.model.NetworkResult
 import not.a.bug.pocketv.model.PocketArticle
 import not.a.bug.pocketv.repository.PocketRepository
@@ -20,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val pocketRepository: PocketRepository
+    private val pocketRepository: PocketRepository,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     private val _latestArticles = MutableStateFlow<List<PocketArticle>>(emptyList())
@@ -65,9 +68,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun loadCategoryArticles(flow: MutableStateFlow<List<PocketArticle>>, state: String? = null, favorite: Int? = null, contentType: String? = null) {
-        when (val result = pocketRepository.getItems(state = state, favorite = favorite, contentType = contentType, count = 9, detailType = "complete")) {
+        when (val result = pocketRepository.getItems(state = state, favorite = favorite, contentType = contentType, count = 15, detailType = "complete")) {
             is NetworkResult.Error -> {
-                // handle error
+                if (result.exception is AccessTokenNotFoundException) {
+                    sessionManager.logOut()
+                }
             }
             is NetworkResult.Loading -> {
                 // handle loading

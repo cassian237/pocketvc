@@ -4,16 +4,23 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import not.a.bug.pocketv.viewmodel.AuthViewModel
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SessionManager @Inject constructor(private val context: Context) {
+class SessionManager @Inject constructor(context: Context) {
 
     companion object {
         private const val SECURE_PREFS_NAME = "secure_prefs"
         private const val ACCESS_TOKEN = "accessToken"
     }
+
+    data class UserState(
+        val accessToken: String?
+    )
 
     private val masterKeyAlias = MasterKey.Builder(context)
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -28,8 +35,12 @@ class SessionManager @Inject constructor(private val context: Context) {
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
 
-    fun saveAccessToken(token: String) {
+    private val _authState = MutableStateFlow(UserState(accessToken = getAccessToken()))
+    val authState: StateFlow<UserState> = _authState
+
+    fun saveAccessToken(token: String?) {
         encryptedSharedPreferences.edit().putString(ACCESS_TOKEN, token).apply()
+        _authState.value = UserState(accessToken = token)
     }
 
     fun getAccessToken(): String? {
@@ -39,5 +50,10 @@ class SessionManager @Inject constructor(private val context: Context) {
 
     fun clear() {
         encryptedSharedPreferences.edit().clear().apply()
+    }
+
+    fun logOut() {
+        saveAccessToken(null)
+        _authState.value = UserState(null)
     }
 }

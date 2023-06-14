@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import not.a.bug.pocketv.SessionManager
+import not.a.bug.pocketv.model.AccessTokenNotFoundException
 import not.a.bug.pocketv.model.NetworkResult
 import not.a.bug.pocketv.model.PocketArticle
 import not.a.bug.pocketv.repository.PocketRepository
@@ -20,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val pocketRepository: PocketRepository
+    private val pocketRepository: PocketRepository,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     private val _articles = MutableStateFlow<List<PocketArticle>>(emptyList())
@@ -34,7 +37,9 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = pocketRepository.getItems(search = searchQuery)) {
                 is NetworkResult.Error -> {
-                    // handle error
+                    if (result.exception is AccessTokenNotFoundException) {
+                        sessionManager.logOut()
+                    }
                 }
                 is NetworkResult.Loading -> {
                     // handle loading

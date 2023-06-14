@@ -117,6 +117,7 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel) {
                             )
                         ),
                         onClick = {
+                            settingsViewModel.logOut()
                         }
                     ) {
                         Row(

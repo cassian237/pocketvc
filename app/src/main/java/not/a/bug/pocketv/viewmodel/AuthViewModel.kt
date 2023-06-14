@@ -24,9 +24,6 @@ class AuthViewModel @Inject constructor(
     private val sessionManager: SessionManager
 ) : ViewModel() {
 
-    private val _authState = MutableStateFlow(UserState(accessToken = sessionManager.getAccessToken()))
-    val authState: StateFlow<UserState> = _authState
-
     private val _requestTokenResult = MutableStateFlow<NetworkResult<RequestTokenResponse>>(NetworkResult.Loading)
     val requestTokenResult: StateFlow<NetworkResult<RequestTokenResponse>> = _requestTokenResult
 
@@ -66,14 +63,6 @@ class AuthViewModel @Inject constructor(
     private fun handleAuthorizationCallback(code: String) {
         viewModelScope.launch {
             val result = pocketRepository.authorize(code)
-
-            if (result is NetworkResult.Success) {
-                _authState.value = UserState(accessToken = sessionManager.getAccessToken())
-            }
         }
     }
-
-    data class UserState(
-        val accessToken: String?
-    )
 }
