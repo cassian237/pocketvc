@@ -19,4 +19,9 @@
     <string name="row_title_videos">Videos</string>
     <string name="empty_article_list_message">No items available. Time to add some!</string>
     <string name="search_result_title">Search Results</string>
+    <string name="article_detail_fullscreen">Fullscreen</string>
+    <string name="article_detail_stop_listening">Stop Listening</string>
+    <string name="article_detail_listen">Listen</string>
+    <string name="article_detail_open_as_text">Open as Text</string>
+    <string name="article_detail_open_in_webview">Open in WebView</string>
 </resources>

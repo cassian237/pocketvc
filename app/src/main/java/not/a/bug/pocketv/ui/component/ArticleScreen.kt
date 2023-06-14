@@ -8,6 +8,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.gestures.scrollBy
@@ -44,6 +45,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -57,7 +59,9 @@ import androidx.tv.material3.IconButton
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import not.a.bug.pocketv.R
 import not.a.bug.pocketv.viewmodel.ArticleViewModel
 import java.util.Locale
 
@@ -84,6 +88,7 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
     var sentences by remember { mutableStateOf(listOf<String>()) }
     var currentSentenceIndex by remember { mutableStateOf(0) }
     var isSpeaking by remember { mutableStateOf(false) }
+    var isFullscreen by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val tts = remember {
@@ -100,7 +105,12 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
             override fun onDone(utteranceId: String?) {
                 if (currentSentenceIndex < sentences.size - 1) {
                     currentSentenceIndex++
-                    tts.speak(sentences[currentSentenceIndex], TextToSpeech.QUEUE_FLUSH, null, "sentence")
+                    tts.speak(
+                        sentences[currentSentenceIndex],
+                        TextToSpeech.QUEUE_FLUSH,
+                        null,
+                        "sentence"
+                    )
                 } else {
                     currentSentenceIndex = 0
                     isSpeaking = false
@@ -116,7 +126,7 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
 
     LaunchedEffect(currentSentenceIndex) {
         val size = sentences.size
-        if(currentSentenceIndex == 1) {
+        if (currentSentenceIndex == 1) {
             listState.animateScrollBy(200f)
         }
         if (size > 0) {
@@ -136,8 +146,14 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
     BackHandler(listState.canScrollBackward) {
         coroutineScope.launch {
             listState.animateScrollToItem(0)
-            firstFocusRequester.requestFocus()
+            if (!isFullscreen) {
+                firstFocusRequester.requestFocus()
+            }
         }
+    }
+
+    BackHandler(isFullscreen) {
+        isFullscreen = false
     }
 
     if (isLoading) {
@@ -151,40 +167,61 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
 
     article?.let { parsedArticle ->
         Column {
-            Row(
-                modifier = Modifier
-                    .padding(16.dp)
-            ) {
-                IconButton(
-                    onClick = { navController.navigateUp() },
+            AnimatedVisibility(visible = !isFullscreen) {
+                Row(
+                    modifier = Modifier
+                        .padding(16.dp)
                 ) {
-                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back")
-                }
-                Spacer(modifier = Modifier.width(16.dp))
-                Button(
-                    modifier = Modifier.focusRequester(firstFocusRequester),
-                    onClick = {
-                        displayWebView = !displayWebView
-                    }, // Toggle the display mode when the button is clicked
-                ) {
-                    Text(text = if (displayWebView) "Open as Text" else "Open in WebView") // Change the button text based on the display mode
-                }
-                if (!displayWebView) {
+                    IconButton(
+                        onClick = { navController.navigateUp() },
+                    ) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back")
+                    }
                     Spacer(modifier = Modifier.width(16.dp))
                     Button(
+                        modifier = Modifier.focusRequester(firstFocusRequester),
                         onClick = {
-                            if (isSpeaking) {
-                                tts.stop()
-                                currentSentenceIndex = 0
-                            } else {
-                                if (sentences.isNotEmpty()) {
-                                    tts.speak(sentences[currentSentenceIndex], TextToSpeech.QUEUE_FLUSH, null, "sentence")
-                                }
-                            }
-                            isSpeaking = !isSpeaking
-                        },
+                            displayWebView = !displayWebView
+                        }, // Toggle the display mode when the button is clicked
                     ) {
-                        Text(text = if (isSpeaking) "Stop Listening" else "Listen")
+                        Text(
+                            text = if (displayWebView) stringResource(R.string.article_detail_open_as_text) else stringResource(
+                                R.string.article_detail_open_in_webview
+                            )
+                        ) // Change the button text based on the display mode
+                    }
+                    if (!displayWebView) {
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Button(
+                            onClick = {
+                                if (isSpeaking) {
+                                    tts.stop()
+                                    currentSentenceIndex = 0
+                                } else {
+                                    if (sentences.isNotEmpty()) {
+                                        tts.speak(
+                                            sentences[currentSentenceIndex],
+                                            TextToSpeech.QUEUE_FLUSH,
+                                            null,
+                                            "sentence"
+                                        )
+                                    }
+                                }
+                                isSpeaking = !isSpeaking
+                            },
+                        ) {
+                            Text(
+                                text = if (isSpeaking) stringResource(R.string.article_detail_stop_listening) else stringResource(
+                                    R.string.article_detail_listen
+                                )
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Button(
+                        onClick = { isFullscreen = true },
+                    ) {
+                        Text(text = stringResource(R.string.article_detail_fullscreen))
                     }
                 }
             }
