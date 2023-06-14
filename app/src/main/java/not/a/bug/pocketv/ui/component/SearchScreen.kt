@@ -71,6 +71,7 @@ import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.LocalContentColor
 import androidx.tv.material3.MaterialTheme
+import androidx.tv.material3.ShapeDefaults
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
@@ -108,7 +109,7 @@ fun SearchScreen(
     ) {
         item {
             Surface(
-                shape = ClickableSurfaceDefaults.shape(shape = JetStreamCardShape),
+                shape = ClickableSurfaceDefaults.shape(shape = ShapeDefaults.Medium),
                 scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
                 color = ClickableSurfaceDefaults.color(
                     color = MaterialTheme.colorScheme.inverseOnSurface,
@@ -122,16 +123,15 @@ fun SearchScreen(
                 border = ClickableSurfaceDefaults.border(
                     focusedBorder = Border(
                         border = BorderStroke(
-                            width = if (isTfFocused) 2.dp else 1.dp,
+                            width = if (isTfFocused) 3.dp else 2.dp,
                             color = animateColorAsState(
                                 targetValue = if (isTfFocused) MaterialTheme.colorScheme.primary
                                 else MaterialTheme.colorScheme.border, label = ""
                             ).value
                         ),
-                        shape = JetStreamCardShape
+                        shape = ShapeDefaults.Medium
                     )
                 ),
-                tonalElevation = 2.dp,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .padding(top = 8.dp),
@@ -214,7 +214,7 @@ fun SearchScreen(
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
-            } else if (articles.isEmpty() && homeViewModel.latestArticles.value.isNotEmpty()) {
+            } else if (articles.isEmpty() && homeViewModel.latestArticles.value.size >= 4) {
                 CarouselForArticle(homeViewModel.latestArticles.value, onArticleClicked)
             } else {
                 ListForArticles(

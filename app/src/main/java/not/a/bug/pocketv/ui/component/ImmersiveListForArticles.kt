@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -45,6 +46,7 @@ import androidx.tv.foundation.lazy.list.itemsIndexed
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.ImmersiveList
 import androidx.tv.material3.MaterialTheme
+import androidx.tv.material3.ShapeDefaults
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
@@ -137,7 +139,8 @@ fun ImmersiveListForArticles(
                                         modifier = Modifier
                                             .height(imageHeight)
                                             .align(Alignment.TopEnd)
-                                            .aspectRatio(16f / 9f),
+                                            .aspectRatio(16f / 9f)
+                                            .clip(ShapeDefaults.Medium),
                                         onState = { state ->
                                             if (state is AsyncImagePainter.State.Error) {
                                                 isImageResolved = false

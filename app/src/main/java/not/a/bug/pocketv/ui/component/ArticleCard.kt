@@ -37,6 +37,7 @@ import androidx.tv.material3.CarouselDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Glow
 import androidx.tv.material3.MaterialTheme
+import androidx.tv.material3.ShapeDefaults
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
@@ -67,7 +68,8 @@ fun ArticleCard(
                     color = MaterialTheme.colorScheme.border
                 )
             )
-        )
+        ),
+        shape = CardDefaults.shape(shape = ShapeDefaults.Medium)
     ) {
         Column(Modifier.blur(radius = 8.dp)) {
             if (isImageResolved) {
