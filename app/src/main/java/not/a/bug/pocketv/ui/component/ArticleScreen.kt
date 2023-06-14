@@ -71,6 +71,7 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
     val colors = MaterialTheme.colorScheme
     val backgroundColor = colors.background.toHex()
     val onBackgroundColor = colors.onBackground.toHex()
+    val hyperlinkColor = colors.primary.toHex()
     val listState = rememberTvLazyListState()
     val firstFocusRequester = remember { FocusRequester() }
     val coroutineScope = rememberCoroutineScope()
@@ -316,6 +317,7 @@ fun ArticleScreen(navController: NavController, articleUrl: String?) {
                                     <html>
                                     <head>
                                         <style>
+                                        a {color: $hyperlinkColor; text-decoration:none}
                                         body {
                                             background-color: $backgroundColor;
                                             color: $onBackgroundColor;
