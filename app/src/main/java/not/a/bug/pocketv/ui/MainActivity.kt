@@ -41,6 +41,7 @@ import androidx.tv.material3.Text
 import dagger.hilt.android.AndroidEntryPoint
 import not.a.bug.notificationcenter.util.FocusGroup
 import not.a.bug.notificationcenter.util.PremiumPillIndicator
+import not.a.bug.pocketv.R
 import not.a.bug.pocketv.SessionManager
 import not.a.bug.pocketv.ui.component.ArticleScreen
 import not.a.bug.pocketv.ui.component.AuthScreen
@@ -69,8 +70,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val isPremium = false
-            val tabs = listOf("Search", "Home", "Settings")
+            val isPremium = true
+            val tabs = listOf(getString(R.string.tab_search), getString(R.string.tab_home), getString(
+                            R.string.tab_settings))
             var selectedTabIndex by remember { mutableStateOf(1) }
             var isTabRowFocused by remember { mutableStateOf(false) }
             val topBarFocusRequesters = List(size = 4) { FocusRequester() }

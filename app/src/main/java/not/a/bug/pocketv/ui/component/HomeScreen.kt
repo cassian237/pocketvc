@@ -15,12 +15,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import not.a.bug.pocketv.R
 import not.a.bug.pocketv.model.PocketArticle
 import not.a.bug.pocketv.viewmodel.HomeViewModel
 
@@ -54,7 +55,7 @@ fun HomeScreen(homeViewModel: HomeViewModel, onArticleClicked : (PocketArticle) 
                     videoContentType.isEmpty()) {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
-                        text = "You have no item (empty message)",
+                        text = stringResource(R.string.empty_article_list_message),
                         style = MaterialTheme.typography.headlineMedium.copy(MaterialTheme.colorScheme.onBackground)
                     )
                 } else {
@@ -64,30 +65,30 @@ fun HomeScreen(homeViewModel: HomeViewModel, onArticleClicked : (PocketArticle) 
                             item {
                                 ImmersiveListForArticles(
                                     Modifier.focusRequester(focusRequester),
-                                    "Latest Articles",
+                                    stringResource(R.string.row_title_latest_articles),
                                     latestArticles,
                                     onArticleClicked
                                 )
                             }
                             item {
                                 ListForArticles(
-                                    "Archived Articles",
+                                    stringResource(R.string.row_title_archived_articles),
                                     archivedArticles,
                                     onArticleClicked
                                 )
                             }
                             item {
                                 ListForArticles(
-                                    "Favorite Articles",
+                                    stringResource(R.string.row_title_favorite_articles),
                                     favoriteArticles,
                                     onArticleClicked
                                 )
                             }
                             item {
-                                ListForArticles("Articles", articleContentType, onArticleClicked)
+                                ListForArticles(stringResource(R.string.row_title_articles), articleContentType, onArticleClicked)
                             }
                             item {
-                                ListForArticles("Videos", videoContentType, onArticleClicked)
+                                ListForArticles(stringResource(R.string.row_title_videos), videoContentType, onArticleClicked)
                             }
                             item { Spacer(modifier = Modifier.height(16.dp)) }
                         })

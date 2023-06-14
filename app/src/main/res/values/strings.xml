@@ -1,12 +1,22 @@
 <resources>
-    <string name="app_name">Pocketv</string>
-    <string name="search_screen_et_placeholder">Search query</string>
+    <string name="app_name">PockeTV: Pocket for TV</string>
+    <string name="search_screen_et_placeholder">Search for content</string>
 
     <string name="settings">Preferences</string>
-    <string name="settings_subtitle">Select your preferences to personalize your experience.</string>
-    <string name="color_theme">Dark theme</string>
-    <string name="log_out">Sign Out</string>
+    <string name="settings_subtitle">Tailor your experience by setting your preferences.</string>
+    <string name="color_theme">Dark Mode</string>
+    <string name="log_out">Log Out</string>
 
-    <string name="auth_title">Welcome to Your Pocket on Android TV!</string>
-    <string name="auth_subtitle">Scan the QR code, sign in, and start enjoying your favorite content in no time.\nLet\'s get started!</string>
+    <string name="auth_title">Welcome to PockeTV: Your Pocket for Android TV!</string>
+    <string name="auth_subtitle">To begin, scan the QR code and sign in. Your favorite content is just a few taps away.</string>
+    <string name="tab_search">Search</string>
+    <string name="tab_home">Home</string>
+    <string name="tab_settings">Settings</string>
+    <string name="row_title_latest_articles">Latest content</string>
+    <string name="row_title_archived_articles">Your Archive</string>
+    <string name="row_title_favorite_articles">Favorites</string>
+    <string name="row_title_articles">Articles</string>
+    <string name="row_title_videos">Videos</string>
+    <string name="empty_article_list_message">No items available. Time to add some!</string>
+    <string name="search_result_title">Search Results</string>
 </resources>
