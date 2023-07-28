@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Authentification Pocket</title>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-analytics-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #333;
+    }
+
+    #message {
+      font-size: 2em;
+    }
+  </style>
+
+  <script>
+    // Votre configuration Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyAdm3gwA-MCgD4zR3-MadVi2NY1jzon4Y8",
+      authDomain: "pocketv-6ebcf.firebaseapp.com",
+      projectId: "pocketv-6ebcf",
+      storageBucket: "pocketv-6ebcf.appspot.com",
+      messagingSenderId: "109717031814",
+      appId: "1:109717031814:web:61c2f1df34213a2437fa07",
+      measurementId: "G-QQRE6TF3NE"
+    };
+
+    // Initialisation de Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const analytics = firebase.analytics();
+    const db = firebase.firestore();
+  </script>
+</head>
+
+<body>
+  <div id="message"></div>
+  <script>
+    // Cette fonction récupère un paramètre d'URL par son nom
+    function getQueryParamByName(name) {
+      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+      return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    // Récupération des paramètres "key" et "requestToken" de l'URL
+    var key = getQueryParamByName('key');
+    var requestToken = getQueryParamByName('request_token');
+    var code = getQueryParamByName('code');
+
+    // Si le paramètre "code" est présent, on l'ajoute à Firestore et on affiche un message
+    if (code !== "") {
+      db.collection("codes").doc(code).set({ value: true })
+        .then(() => {
+          document.getElementById("message").textContent = "Log in success!";
+        })
+        .catch((error) => {
+          console.error("Error writing document: ", error);
+        });
+    } else {
+      // Construction de l'URL d'autorisation Pocket
+      var pocketAuthUrl = 'https://getpocket.com/auth/authorize?request_token=' + requestToken + '&redirect_uri=https%3A%2F%2Fpocketv-6ebcf.web.app%3Fcode%3D' + key;
+
+      // Redirection de l'utilisateur vers l'URL d'autorisation Pocket
+      window.location.href = pocketAuthUrl;
+    }
+  </script>
+</body>
+
+</html>
